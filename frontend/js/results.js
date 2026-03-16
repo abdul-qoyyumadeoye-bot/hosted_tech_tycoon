@@ -185,33 +185,47 @@ function renderDecisionsSummary() {
 }
 
 async function saveResults() {
-  try {
-    const data = {
-      teamName: gameState.data.teamName,
-      problemId: gameState.data.problemId,
-      role: gameState.data.role,
-      teamMembers: gameState.data.teamMembers,
-      finalScores: gameState.data.scores,
-      choices: gameState.data.choices,
-      duration: gameState.getDuration(),
-      timestamp: new Date().toISOString()
-    };
+  const data = {
+    teamName: gameState.data.teamName,
+    problemId: gameState.data.problemId,
+    role: gameState.data.role,
+    teamMembers: gameState.data.teamMembers,
+    finalScores: gameState.data.scores,
+    choices: gameState.data.choices,
+    duration: gameState.getDuration(),
+    timestamp: new Date().toISOString()
+  };
 
-    const response = await fetch('http://localhost:3000/api/game/save', {
+  try {
+    const response = await fetch('/api/game/save', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
 
+    if (!response.ok) throw new Error('Save endpoint unavailable');
     const result = await response.json();
     if (result.success) {
-      window.TechTycoonUI?.showNotification({ title: 'Results saved', message: 'Your run was saved to the local server.', type: 'success' });
+      window.TechTycoonUI?.showNotification({ title: 'Results saved', message: 'Your run was saved successfully.', type: 'success' });
     } else {
-      alert('Error saving results. You can download as CSV instead.');
+      throw new Error('Save endpoint returned an error');
     }
   } catch (e) {
-    console.error('Error saving results:', e);
-    alert('Could not connect to server. Make sure the backend is running on localhost:3000');
+    console.warn('Save endpoint unavailable, downloading JSON instead:', e);
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `techtycoon-results-${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+    window.TechTycoonUI?.showNotification({
+      title: 'Saved locally',
+      message: 'Downloaded a JSON copy because no server save endpoint was available.',
+      type: 'info'
+    });
   }
 }
 
@@ -227,7 +241,7 @@ async function downloadResults() {
     };
 
     try {
-      const response = await fetch(`http://localhost:3000/api/game/export/${data.timestamp}`, {
+      const response = await fetch(`/api/game/export/${data.timestamp}`, {
         method: 'GET'
       });
       if (response.ok) {

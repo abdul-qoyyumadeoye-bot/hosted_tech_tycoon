@@ -1,13 +1,13 @@
 // ============================================================================
 // PROBLEM SELECTION PAGE
-// Loads fixed scenarios from data/scenarios.json
+// Loads fixed scenarios from frontend/data/scenarios.json
 // ============================================================================
 
 let scenarios = [];
 
 async function loadScenarios() {
   try {
-    const response = await fetch('../data/scenarios.json');
+    const response = await fetch('data/scenarios.json');
     const data = await response.json();
     const problems = Array.isArray(data.problems) ? data.problems : [];
     const uniqueById = new Map();
@@ -15,7 +15,7 @@ async function loadScenarios() {
       if (p && p.id && !uniqueById.has(p.id)) uniqueById.set(p.id, p);
     });
     scenarios = Array.from(uniqueById.values());
-    if (scenarios.length === 0) throw new Error('No scenarios found in data/scenarios.json');
+    if (scenarios.length === 0) throw new Error('No scenarios found in frontend/data/scenarios.json');
     renderProblems();
   } catch (e) {
     console.error('Error loading scenarios:', e);

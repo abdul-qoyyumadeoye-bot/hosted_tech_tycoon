@@ -8,18 +8,16 @@
   <link rel="stylesheet" href="css/avatars.css?v=20260316b">
 </head>
 <body class="page-results">
-  <!-- Navigation -->
   <nav class="topnav">
     <div class="topnav-content">
-      <h1>⚡ TechTycoon Simulator</h1>
+      <h1>TechTycoon Simulator</h1>
       <div class="progress-bar-container">
         <div class="progress-bar" style="width: 100%;"></div>
       </div>
-      <button class="access-btn" id="accessibility-toggle" aria-label="Accessibility settings" aria-expanded="false">♿</button>
+      <button class="access-btn" id="accessibility-toggle" aria-label="Accessibility settings" aria-expanded="false">&#9855;</button>
     </div>
   </nav>
 
-  <!-- Accessibility Panel -->
   <div id="accessibility-panel" style="display: none;">
     <label>
       <input type="checkbox" id="high-contrast-toggle"> High Contrast Mode
@@ -33,15 +31,12 @@
     <button class="btn btn-primary" id="read-aloud-btn" style="display: none;">Read Aloud</button>
   </div>
 
-  <!-- Main Content -->
   <main class="main-container">
     <div class="results-container">
       <h2 class="results-title">Game Complete!</h2>
-      
-      <div id="results-message" class="results-message results-block">
-        <!-- Results message will be inserted here -->
-      </div>
-      
+
+      <div id="results-message" class="results-message results-block"></div>
+
       <div id="results-badges" class="results-badges results-block"></div>
       <div class="Final-scores-grid results-block">
         <div class="score-card">
@@ -61,31 +56,27 @@
           <div class="score-value budget" id="final-budget">$0</div>
         </div>
       </div>
-      
+
       <div class="reflection-section results-block">
         <div class="reflection-title">Reflection Questions</div>
-        <ul class="reflection-questions" id="reflection-questions">
-          <!-- Reflection questions will be inserted here -->
-        </ul>
+        <ul class="reflection-questions" id="reflection-questions"></ul>
       </div>
-      
+
       <div id="summary-section" class="results-block" style="margin: 24px 0; padding: 16px; background: #f0f9ff; border-radius: 8px;">
         <h3 style="margin-top: 0;">Your Decisions</h3>
         <div id="decisions-summary"></div>
       </div>
-      
+
       <div class="button-group">
-        <button class="btn btn-success" onclick="saveResults()">💾 Save Results</button>
-        <button class="btn btn-secondary" onclick="downloadResults()">📥 Download as CSV</button>
-        <button class="btn btn-primary" onclick="startNewGame()">🔄 Play Again</button>
+        <button class="btn btn-success" onclick="saveResults()">Save Results</button>
+        <button class="btn btn-secondary" onclick="downloadResults()">Download as CSV</button>
+        <button class="btn btn-primary" onclick="startNewGame()">Play Again</button>
       </div>
     </div>
   </main>
 
   <footer class="nav-footer">
-    <!-- footer intentionally left blank; buttons already in content -->
   </footer>
-
 
   <script src="js/gameState.js?v=20260316b"></script>
   <script src="js/accessibility.js?v=20260316b"></script>
@@ -93,7 +84,3 @@
   <script src="js/results.js?v=20260316b"></script>
 </body>
 </html>
-
-
-
-

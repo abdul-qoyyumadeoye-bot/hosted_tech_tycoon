@@ -1314,6 +1314,12 @@ html {
   background: linear-gradient(180deg, #f4f8fb 0%, #e7eef5 100%);
 }
 
+html.loading-lock,
+body.loading-lock {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
 body {
   background:
     radial-gradient(circle at 8% 10%, rgba(23, 118, 210, 0.12), transparent 28%),
@@ -1756,6 +1762,7 @@ button:focus-visible {
   display: grid;
   place-items: center;
   padding: 24px;
+  overflow: hidden;
   background:
     radial-gradient(circle at 20% 18%, rgba(94, 180, 255, 0.24), transparent 26%),
     radial-gradient(circle at 78% 20%, rgba(86, 213, 141, 0.16), transparent 18%),
@@ -1799,20 +1806,6 @@ button:focus-visible {
   inset: 0 0 auto 0;
   height: 5px;
   background: linear-gradient(90deg, #1776d2, #53b4ff, #56d58d, #ffd66b);
-}
-
-.loading-overlay__page-hint {
-  position: fixed;
-  top: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(720px, calc(100vw - 32px));
-  text-align: center;
-  color: #dbeafe;
-  font-family: "Cavolini", "Segoe Print", "Comic Sans MS", cursive;
-  font-size: 1.08rem;
-  line-height: 1.2;
-  z-index: 230;
 }
 
 .loading-overlay__hint {
@@ -2164,7 +2157,6 @@ body.high-contrast .results-badge,
 body.high-contrast .loading-overlay__button,
 body.high-contrast .loading-overlay__panel,
 body.high-contrast .loading-overlay__hint,
-body.high-contrast .loading-overlay__page-hint,
 body.high-contrast #summary-section,
 body.high-contrast #summary-section *,
 body.high-contrast .brief-hero,

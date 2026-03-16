@@ -46,7 +46,6 @@
       loadingOverlay.className = "loading-overlay";
       loadingOverlay.setAttribute("aria-hidden", "true");
       loadingOverlay.innerHTML = `
-        <div class="loading-overlay__page-hint">Scroll down to see the loading page correctly</div>
         <div class="loading-overlay__panel">
           <div class="loading-overlay__scene" aria-hidden="true">
             <div class="loading-orbit loading-orbit--outer"></div>
@@ -234,6 +233,8 @@
     if (!loadingOverlay) return;
     const button = loadingOverlay.querySelector(".loading-overlay__button");
     if (button) button.textContent = label;
+    document.documentElement.classList.add("loading-lock");
+    document.body.classList.add("loading-lock");
     loadingOverlay.classList.add("is-visible");
     loadingOverlay.setAttribute("aria-hidden", "false");
   }
@@ -242,6 +243,8 @@
     if (!loadingOverlay) return;
     loadingOverlay.classList.remove("is-visible");
     loadingOverlay.setAttribute("aria-hidden", "true");
+    document.documentElement.classList.remove("loading-lock");
+    document.body.classList.remove("loading-lock");
   }
 
   function showNotification({ title, message = "", type = "info", duration = 2600 }) {

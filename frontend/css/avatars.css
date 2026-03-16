@@ -112,6 +112,12 @@
 }
 
 .avatar-card--team {
+  --avatar-primary: #1776d2;
+  --avatar-secondary: #53b4ff;
+  --avatar-surface: #cfe8ff;
+  --orbit-dot-one: 14%;
+  --orbit-dot-two: 18%;
+  --orbit-dot-three: 20%;
   justify-content: flex-start;
   min-height: 260px;
   padding: 26px 18px 20px;
@@ -119,7 +125,7 @@
   text-align: center;
   isolation: isolate;
   background:
-    radial-gradient(circle at top, rgba(94, 180, 255, 0.22), transparent 36%),
+    radial-gradient(circle at top, color-mix(in srgb, var(--avatar-secondary) 24%, white), transparent 36%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(236, 245, 255, 0.92));
 }
 
@@ -148,26 +154,34 @@
 }
 
 .avatar-orbit::before,
-.avatar-orbit::after {
+.avatar-orbit::after,
+.avatar-visual::before {
   content: "";
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1776d2, #53b4ff);
+  background: linear-gradient(135deg, var(--avatar-primary), var(--avatar-secondary));
 }
 
 .avatar-orbit::before {
   width: 12px;
   height: 12px;
-  top: 14px;
-  left: 14px;
+  top: var(--orbit-dot-one);
+  left: 12px;
 }
 
 .avatar-orbit::after {
   width: 10px;
   height: 10px;
-  right: 20px;
+  right: var(--orbit-dot-two);
   bottom: 14px;
-  background: linear-gradient(135deg, #129b67, #56d58d);
+}
+
+.avatar-visual::before {
+  width: 8px;
+  height: 8px;
+  top: 12px;
+  right: var(--orbit-dot-three);
+  opacity: 0.86;
 }
 
 .avatar-visual {
@@ -184,16 +198,26 @@
   width: 96px;
   height: 96px;
   margin-bottom: 0;
-  font-size: 34px;
+  padding: 12px 10px;
+  background: linear-gradient(135deg, var(--avatar-primary), var(--avatar-secondary));
+  box-shadow: 0 16px 28px color-mix(in srgb, var(--avatar-primary) 30%, transparent);
   position: relative;
   z-index: 2;
+  display: grid;
+  place-items: center;
+}
+
+.avatar-emoji {
+  font-size: 34px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 10px rgba(15, 23, 42, 0.16));
 }
 
 .avatar-glow {
   position: absolute;
   inset: 22px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.78), rgba(94, 180, 255, 0.18) 62%, transparent 74%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.78), color-mix(in srgb, var(--avatar-secondary) 26%, white) 62%, transparent 74%);
   filter: blur(6px);
   z-index: 1;
 }
@@ -214,12 +238,12 @@
 }
 
 .avatar-card--team.selected .avatar-orbit {
-  border-color: rgba(23, 118, 210, 0.34);
-  box-shadow: 0 0 0 10px rgba(23, 118, 210, 0.08);
+  border-color: color-mix(in srgb, var(--avatar-primary) 38%, white);
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--avatar-primary) 10%, transparent);
 }
 
 .avatar-card--team.selected .avatar-glow {
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.82), rgba(94, 180, 255, 0.3) 58%, transparent 78%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.82), color-mix(in srgb, var(--avatar-secondary) 34%, white) 58%, transparent 78%);
 }
 
 /* ============================================================================
@@ -687,7 +711,7 @@
   .avatar-card--team .avatar-icon {
     width: 82px;
     height: 82px;
-    font-size: 28px;
+    padding: 10px 8px;
   }
 
   .avatar-visual {
@@ -903,7 +927,7 @@
   .avatar-card--team .avatar-icon {
     width: 74px;
     height: 74px;
-    font-size: 24px;
+    padding: 9px 7px;
   }
 
   .avatar-visual {
@@ -1146,6 +1170,10 @@
     font-size: 9px;
   }
 
+  .avatar-emoji {
+    font-size: 26px;
+  }
+
   .problem-card {
     padding: 12px;
   }
@@ -1277,15 +1305,49 @@ body.high-contrast .avatar-name,
 body.high-contrast .problem-title,
 body.high-contrast .stage-title,
 body.high-contrast .choice-text,
-body.high-contrast .score-label {
+body.high-contrast .score-label,
+body.high-contrast .results-title,
+body.high-contrast .reflection-title,
+body.high-contrast .brief-panel h3,
+body.high-contrast .brief-hero h2,
+body.high-contrast .Final-scores-grid .score-value {
   color: #ffffff;
 }
 
 body.high-contrast .avatar-description,
 body.high-contrast .stage-description,
 body.high-contrast .problem-description,
-body.high-contrast .results-message {
+body.high-contrast .results-message,
+body.high-contrast .reflection-questions,
+body.high-contrast .brief-hero p,
+body.high-contrast .brief-panel li,
+body.high-contrast .brief-stat-card small {
   color: #cccccc;
+}
+
+body.high-contrast .avatar-tag,
+body.high-contrast .problem-theme,
+body.high-contrast .avatar-emoji,
+body.high-contrast .avatar-symbol,
+body.high-contrast .avatar-motif {
+  color: #ffff00 !important;
+}
+
+body.high-contrast .avatar-orbit,
+body.high-contrast .avatar-orbit::before,
+body.high-contrast .avatar-orbit::after,
+body.high-contrast .avatar-visual::before {
+  border-color: #ffffff !important;
+  background: #ffff00 !important;
+  box-shadow: none !important;
+}
+
+body.high-contrast .avatar-card--team .avatar-icon,
+body.high-contrast .avatar-glow {
+  background: #000000 !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: none !important;
+  filter: none !important;
 }
 
 body.high-contrast .impact-badge.positive {

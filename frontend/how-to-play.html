@@ -8,17 +8,17 @@
   <link rel="stylesheet" href="css/avatars.css?v=20260316b">
   <style>
     .rules-container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 24px;
       line-height: 1.8;
     }
 
     .rules-container h2 {
-      color: #3b82f6;
+      color: #1776d2;
       margin-top: 32px;
       margin-bottom: 16px;
-      border-bottom: 3px solid #3b82f6;
+      border-bottom: 3px solid #1776d2;
       padding-bottom: 8px;
       font-size: 24px;
     }
@@ -28,7 +28,7 @@
     }
 
     .rules-container h3 {
-      color: #2563eb;
+      color: #0f5cad;
       margin-top: 20px;
       margin-bottom: 12px;
       font-size: 18px;
@@ -40,7 +40,8 @@
       font-size: 15px;
     }
 
-    .rules-container ul, .rules-container ol {
+    .rules-container ul,
+    .rules-container ol {
       margin-left: 24px;
       margin-bottom: 16px;
       color: #374151;
@@ -59,14 +60,14 @@
 
     .metric-box {
       background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
-      border-left: 4px solid #3b82f6;
+      border-left: 4px solid #1776d2;
       padding: 16px;
       margin: 16px 0;
       border-radius: 6px;
     }
 
     .metric-box h4 {
-      color: #2563eb;
+      color: #0f5cad;
       margin-top: 0;
       margin-bottom: 8px;
       font-size: 16px;
@@ -90,11 +91,6 @@
 
     .decision-example strong {
       color: #1f2937;
-    }
-
-    .emoji {
-      font-size: 20px;
-      margin-right: 8px;
     }
 
     .highlight-box {
@@ -121,37 +117,6 @@
       border-top: 2px solid #e5e7eb;
     }
 
-    .btn {
-      padding: 12px 32px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .btn-primary {
-      background: #3b82f6;
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: #2563eb;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-    }
-
-    .btn-secondary {
-      background: #e5e7eb;
-      color: #1f2937;
-    }
-
-    .btn-secondary:hover {
-      background: #d1d5db;
-      transform: translateY(-2px);
-    }
-
     .nav-top {
       display: flex;
       justify-content: space-between;
@@ -167,19 +132,40 @@
       color: #1f2937;
     }
 
-    .nav-top button {
-      padding: 8px 16px;
-      font-size: 14px;
-      background: #3b82f6;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
+    body.high-contrast .rules-container h2,
+    body.high-contrast .rules-container h3,
+    body.high-contrast .rules-container p,
+    body.high-contrast .rules-container li,
+    body.high-contrast .rules-container strong,
+    body.high-contrast .nav-top h1 {
+      color: #ffffff !important;
+      text-shadow: none !important;
     }
 
-    .nav-top button:hover {
-      background: #2563eb;
+    body.high-contrast .rules-container h2 {
+      border-bottom-color: #ffff00 !important;
+    }
+
+    body.high-contrast .metric-box,
+    body.high-contrast .decision-example,
+    body.high-contrast .highlight-box,
+    body.high-contrast .button-container {
+      background: #000000 !important;
+      border: 2px solid #ffffff !important;
+      box-shadow: none !important;
+    }
+
+    body.high-contrast .button-container {
+      border-left: 0 !important;
+      border-right: 0 !important;
+      border-bottom: 0 !important;
+    }
+
+    body.high-contrast .metric-box h4,
+    body.high-contrast .highlight-box p,
+    body.high-contrast .decision-example,
+    body.high-contrast .decision-example strong {
+      color: #ffff00 !important;
     }
 
     @media (max-width: 768px) {
@@ -198,206 +184,176 @@
   </style>
 </head>
 <body class="page-rules">
-  <!-- Navigation -->
   <div class="nav-top">
-    <h1>⚡ TechTycoon - How to Play</h1>
-    <button onclick="window.location.href='index.html'">Close</button>
+    <h1>TechTycoon - How to Play</h1>
+    <button class="btn btn-primary" type="button" onclick="goHome()">Close</button>
   </div>
 
-  <!-- Main Content -->
   <main class="rules-container">
-
-    <!-- WELCOME SECTION -->
-    <h2>🎮 Welcome to TechTycoon!</h2>
+    <h2>Welcome to TechTycoon</h2>
     <p>
-      Get ready to become a tech entrepreneur! In this game, <strong>you and your team will make tough decisions running a startup company</strong>. You'll face budget constraints, user needs, ethics challenges, and unexpected crises. Every choice you make has consequences—some good, some risky, some surprising!
+      Get ready to become a tech entrepreneur. In this game, <strong>you and your team will make tough decisions while running a startup company</strong>. You will face budget pressure, user needs, ethics challenges, and unexpected crises. Every choice has consequences.
     </p>
 
-    <!-- OBJECTIVE -->
-    <h2>🎯 Your Mission</h2>
+    <h2>Your Mission</h2>
     <p>
-      <strong>Build a successful, ethical tech company.</strong> You'll guide your startup through five to seven critical days, each representing a major phase of your journey: from your founding vision, through building your product, launching to users, handling crises, and scaling your company.
+      <strong>Build a successful, ethical tech company.</strong> You will guide your startup through five to seven critical days, from shaping your vision to launching, managing crises, and scaling responsibly.
     </p>
-    <p>
-      Your goal is not to "win" or get the highest score. Instead, you'll learn about:
-    </p>
+    <p>Your goal is not just to chase a high score. You are here to learn about:</p>
     <ul>
-      <li><strong>Trade-offs:</strong> You can't do everything. Speed costs money. Including everyone takes time. Choose wisely!</li>
-      <li><strong>Real-world complexity:</strong> Tech companies face problems you might not expect. How will you respond?</li>
-      <li><strong>Ethics matter:</strong> Decisions that seem "profitable" might hurt people. Is that acceptable?</li>
-      <li><strong>Teamwork:</strong> Different perspectives lead to better decisions. Listen to your teammates!</li>
+      <li><strong>Trade-offs:</strong> Speed, quality, inclusion, and money all compete with each other.</li>
+      <li><strong>Real-world complexity:</strong> Tech problems rarely have one perfect answer.</li>
+      <li><strong>Ethics:</strong> Profitable decisions can still hurt people.</li>
+      <li><strong>Teamwork:</strong> Better decisions come from discussion and different perspectives.</li>
     </ul>
 
-    <!-- HOW THE GAME WORKS -->
-    <h2>🕹️ How the Game Works</h2>
+    <h2>How the Game Works</h2>
     <h3>The Setup</h3>
     <ol>
-      <li><strong>Enter your team name</strong> – Something creative!</li>
-      <li><strong>Choose a problem scenario</strong> – Five different crisis situations. Each play is different!</li>
-      <li><strong>Pick your leadership role</strong> – Will you lead as a Technical Lead, Design Lead, Product Lead, Security Lead, or Data Lead?</li>
-      <li><strong>Assemble your team</strong> – Pick 5 specialists from 12 available roles. Your team composition affects how you approach challenges!</li>
-      <li><strong>Begin the game</strong> – Face 5–7 decision days</li>
+      <li><strong>Enter your team name</strong> and get ready to play.</li>
+      <li><strong>Choose a problem scenario</strong> from the available crisis situations.</li>
+      <li><strong>Pick your leadership role</strong> to frame your approach.</li>
+      <li><strong>Assemble your team</strong> from a range of specialist roles.</li>
+      <li><strong>Begin the run</strong> and work through 5 to 7 decision days.</li>
     </ol>
 
     <h3>Each Decision Day</h3>
     <p>
-      In each day, you'll read a <strong>scenario description</strong> explaining a challenge your company faces. You'll then choose from <strong>2–3 options</strong>, each with different consequences.
+      You will read a scenario that explains the challenge your company is facing, then choose from two or three options. Each option affects your scores in a different way.
     </p>
     <div class="decision-example">
-      <strong>Example stage:</strong> "Your team has built a prototype. Do you test it with real users (including people with disabilities) for £6,000, or use automated tests only for £2,000?"<br><br>
-      <strong>Option A:</strong> Test with real users → More inclusivity, higher trust, but costs more money<br>
-      <strong>Option B:</strong> Automated tests only → Faster and cheaper, but might miss real usability problems
+      <strong>Example stage:</strong> Your team has built a prototype. Do you test it with real users, including people with disabilities, for GBP 6,000, or use automated tests only for GBP 2,000?
+      <br><br>
+      <strong>Option A:</strong> More inclusivity and higher trust, but more spending.
+      <br>
+      <strong>Option B:</strong> Faster and cheaper, but more risk of missing real usability issues.
     </div>
 
-    <!-- METRICS -->
-    <h2>📊 The Four Metrics</h2>
-    <p>
-      Every decision affects four scores. There's no "perfect" score—it depends on your priorities and values.
-    </p>
+    <h2>The Four Metrics</h2>
+    <p>Every decision affects four scores. There is no single perfect outcome.</p>
 
     <div class="metric-box">
-      <h4><span class="emoji">📈</span><strong>Impact</strong></h4>
-      <p>
-        How effectively did you solve the problem? Did you ship your product on time? Did you respond to crises quickly? High impact means you get results, but it sometimes means cutting corners on other priorities.
-      </p>
+      <h4>Impact</h4>
+      <p>How effectively did you solve the problem and move the project forward?</p>
     </div>
 
     <div class="metric-box">
-      <h4><span class="emoji">❤️</span><strong>Inclusivity</strong></h4>
-      <p>
-        Did you think about all users, not just the "average"? Did you include people with disabilities, different backgrounds, different languages? Did you consider how your company treats its employees? High inclusivity means you're building for everyone, but it requires time and money.
-      </p>
+      <h4>Inclusivity</h4>
+      <p>Did you design for a wide range of users and think carefully about fairness and access?</p>
     </div>
 
     <div class="metric-box">
-      <h4><span class="emoji">🤝</span><strong>Trust</strong></h4>
-      <p>
-        Do people believe in you and your company? Did you communicate honestly during crises? Are you transparent about your practices? High trust means investors, users, and employees are loyal to you. Low trust can destroy your business.
-      </p>
+      <h4>Trust</h4>
+      <p>Did users, partners, and stakeholders feel that your team acted honestly and responsibly?</p>
     </div>
 
     <div class="metric-box">
-      <h4><span class="emoji">💰</span><strong>Budget</strong></h4>
-      <p>
-        How much money do you have left? Every good decision costs money. If your budget reaches £0 or goes negative, your company runs out of money and the game ends early. Balance spending with saving!
-      </p>
+      <h4>Budget</h4>
+      <p>How much money do you have left to keep the company moving? If it runs out, the run can end early.</p>
     </div>
 
-    <!-- DECISION IMPACT -->
-    <h2>⚖️ How Decisions Matter</h2>
-    <p>
-      Every choice changes all four metrics. For example:
-    </p>
+    <h2>How Decisions Matter</h2>
+    <p>Every choice shifts all four metrics. That is what makes the game interesting.</p>
     <div class="decision-example">
-      <strong>"Hire an Accessibility Specialist"</strong>
+      <strong>Hire an accessibility specialist</strong>
       <ul style="margin: 0; padding-left: 20px;">
-        <li>📈 <strong>Impact:</strong> +10 (shows you're addressing real problems)</li>
-        <li>❤️ <strong>Inclusivity:</strong> +16 (you're taking inclusion seriously)</li>
-        <li>🤝 <strong>Trust:</strong> +12 (people see you care)</li>
-        <li>💰 <strong>Budget:</strong> -£3,500 (their salary)</li>
+        <li><strong>Impact:</strong> You make more reliable progress on the real problem.</li>
+        <li><strong>Inclusivity:</strong> You take inclusion seriously and improve access.</li>
+        <li><strong>Trust:</strong> People see that your team cares.</li>
+        <li><strong>Budget:</strong> It costs more money.</li>
       </ul>
     </div>
 
     <div class="decision-example">
-      <strong>"Ignore accessibility complaints and move forward"</strong>
+      <strong>Ignore complaints and move forward</strong>
       <ul style="margin: 0; padding-left: 20px;">
-        <li>📈 <strong>Impact:</strong> +8 (you're shipping fast)</li>
-        <li>❤️ <strong>Inclusivity:</strong> +2 (bottom of the scale)</li>
-        <li>🤝 <strong>Trust:</strong> -12 (people are angry)</li>
-        <li>💰 <strong>Budget:</strong> -£500 (minimal spending)</li>
+        <li><strong>Impact:</strong> You move quickly in the short term.</li>
+        <li><strong>Inclusivity:</strong> More users may be excluded.</li>
+        <li><strong>Trust:</strong> Stakeholders may lose confidence.</li>
+        <li><strong>Budget:</strong> It is cheaper in the moment.</li>
       </ul>
     </div>
 
-    <!-- NO RIGHT ANSWER -->
-    <h2>✨ There Is NO "Right Answer"</h2>
+    <h2>There Is No Single Right Answer</h2>
     <p>
-      This is important: <strong>There is no perfect path through this game.</strong>
-    </p>
-    <ul>
-      <li>You might prioritize speed (high Impact, lower Inclusivity)</li>
-      <li>You might prioritize values (high Inclusivity, lower Budget)</li>
-      <li>You might balance all four metrics</li>
-      <li>You might accept some risks for big rewards</li>
-    </ul>
-    <p>
-      <strong>All approaches are valid!</strong> The point is to think about trade-offs and discuss with your team: "Was this choice worth it?"
+      Some teams will prioritize speed. Others will prioritize inclusion or careful budgeting. The important part is discussing the trade-offs and understanding what each decision says about your values.
     </p>
 
     <div class="highlight-box">
       <p>
-        🌟 <strong>Best Strategy:</strong> Discuss each decision with your teammates before choosing. Why does one person prefer Option A? Why does another prefer Option B? That conversation is the real learning!
+        <strong>Best strategy:</strong> Talk through every decision with your teammates before choosing. The conversation is where a lot of the learning happens.
       </p>
     </div>
 
-    <!-- CLASSROOM EXPECTATIONS -->
-    <h2>👥 Classroom Rules & Expectations</h2>
+    <h2>Classroom Expectations</h2>
     <h3>During the Game</h3>
     <ul>
-      <li><strong>Work as a team:</strong> Discuss each decision. Everyone's opinion matters.</li>
-      <li><strong>Be respectful:</strong> If someone disagrees with your choice, listen to why. There's no "stupid" option—all choices have trade-offs.</li>
-      <li><strong>Share the controls:</strong> Take turns clicking decisions. Everyone should have a voice.</li>
-      <li><strong>Play on one device:</strong> Huddle around the screen to see the decisions together.</li>
-      <li><strong>No "spoilers":</strong> If you've already played, don't tell other teams what happens. Every playthrough is different!</li>
+      <li><strong>Work as a team:</strong> Everyone should have a voice.</li>
+      <li><strong>Be respectful:</strong> Different choices come from different priorities.</li>
+      <li><strong>Share the controls:</strong> Let different people interact with the game.</li>
+      <li><strong>Play together:</strong> Use one device and discuss each stage as a group.</li>
+      <li><strong>No spoilers:</strong> Let other teams discover their own outcomes.</li>
     </ul>
 
     <h3>After the Game</h3>
     <ul>
-      <li><strong>Discuss your decisions:</strong> Why did you make the choices you did?</li>
-      <li><strong>Compare with other teams:</strong> Did other teams choose differently? What were the results?</li>
-      <li><strong>Reflect on ethics:</strong> Were there decisions you felt uncomfortable with? Why?</li>
-      <li><strong>Connect to the real world:</strong> How do companies like Google, Apple, or TikTok face similar decisions?</li>
+      <li><strong>Discuss your decisions:</strong> Why did your team choose the path it did?</li>
+      <li><strong>Compare with other teams:</strong> What changed when people made different trade-offs?</li>
+      <li><strong>Reflect on ethics:</strong> Were there choices that felt uncomfortable?</li>
+      <li><strong>Connect to the real world:</strong> How do real companies face similar tensions?</li>
     </ul>
 
-    <!-- QUICK REFERENCE -->
-    <h2>📋 Quick Reference</h2>
+    <h2>Quick Reference</h2>
     <h3>Game Duration</h3>
-    <p><strong>20–30 minutes</strong> to play through all stages</p>
+    <p><strong>20 to 30 minutes</strong> for a full run.</p>
 
     <h3>Team Size</h3>
-    <p><strong>4–5 players</strong> (but 1 player can play alone if needed)</p>
+    <p><strong>4 to 5 players</strong> works best, though one player can also play alone.</p>
 
     <h3>What Makes Scenarios Different?</h3>
     <ul>
-      <li>Different crisis types (accessibility, data breach, AI bias, workplace culture)</li>
-      <li>Different number of stages (5–7)</li>
-      <li>Unexpected decisions in different orders</li>
-      <li>Every play is unique!</li>
+      <li>Different crisis types, such as accessibility, security, bias, or workplace culture.</li>
+      <li>Different numbers of stages.</li>
+      <li>Different pressures, timings, and trade-offs.</li>
+      <li>Different choices that shape the final outcome.</li>
     </ul>
 
-    <!-- KEY PRINCIPLES -->
-    <h2>🔑 Key Principles to Remember</h2>
+    <h2>Key Principles to Remember</h2>
     <ul>
-      <li><strong>Everything has a cost:</strong> No decision is free. Choose what matters most to you.</li>
-      <li><strong>Speed vs. Quality:</strong> You can move fast OR be thorough, rarely both.</li>
-      <li><strong>Ethics have value:</strong> Inclusive, transparent decisions build long-term trust.</li>
-      <li><strong>Crises are inevitable:</strong> Plan for problems. How you respond defines your company.</li>
-      <li><strong>Your team is your strength:</strong> Diverse perspectives lead to better decisions.</li>
-      <li><strong>Money matters:</strong> You can't do great things if you're broke. Budget carefully.</li>
+      <li><strong>Everything has a cost:</strong> No decision is free.</li>
+      <li><strong>Speed versus quality:</strong> Moving fast can create risks.</li>
+      <li><strong>Ethics have value:</strong> Trust and inclusion matter.</li>
+      <li><strong>Crises are inevitable:</strong> Your response defines your company.</li>
+      <li><strong>Your team is your strength:</strong> Diverse perspectives improve decisions.</li>
+      <li><strong>Money matters:</strong> Budget carefully if you want to finish the run.</li>
     </ul>
 
-    <!-- READY TO PLAY -->
-    <h2>🚀 Ready to Play?</h2>
+    <h2>Ready to Play?</h2>
     <p>
-      Now you understand the basics! Every playthrough is different, so you'll face new challenges each time. Make thoughtful decisions, discuss with your team, and remember: <strong>there's no "right" way to run a company—only the way that aligns with your values.</strong>
+      Every playthrough is a little different. Make thoughtful decisions, listen to each other, and remember that the goal is not just to finish, but to understand the trade-offs behind responsible tech leadership.
     </p>
 
     <div class="highlight-box">
       <p>
-        💡 <strong>Pro Tip:</strong> If you want to test a specific scenario with your class, ask your teacher about "seeded scenarios"—they can set the same seed so everyone plays the exact same company crises!
+        <strong>Pro tip:</strong> If you want to compare outcomes across a class, your teacher can have everyone focus on the same scenario and then compare how each team responded.
       </p>
     </div>
 
-    <!-- BUTTONS -->
     <div class="button-container">
-      <button class="btn btn-secondary" onclick="window.location.href='index.html'">Back to Home</button>
-      <button class="btn btn-primary" onclick="window.location.href='index.html'; setTimeout(() => document.getElementById('team-name').focus(), 200)">Start Playing →</button>
+      <button class="btn btn-secondary" type="button" onclick="goHome()">Back to Home</button>
+      <button class="btn btn-primary" type="button" onclick="startPlaying()">Start Playing</button>
     </div>
-
   </main>
 
   <script src="js/ui.js?v=20260316b"></script>
+  <script>
+    function goHome() {
+      window.TechTycoonUI?.navigate('index.html') || (window.location.href = 'index.html');
+    }
+
+    function startPlaying() {
+      goHome();
+    }
+  </script>
 </body>
 </html>
-
-
-

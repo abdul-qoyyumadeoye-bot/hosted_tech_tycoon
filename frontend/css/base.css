@@ -2100,6 +2100,95 @@ body.high-contrast li {
   color: #fff !important;
 }
 
+body.high-contrast h1,
+body.high-contrast h2,
+body.high-contrast h3,
+body.high-contrast h4,
+body.high-contrast strong,
+body.high-contrast .results-title,
+body.high-contrast .results-message strong,
+body.high-contrast .day-overlay__title,
+body.high-contrast .loading-overlay__button,
+body.high-contrast .topnav h1,
+body.high-contrast .nav-top h1 {
+  color: #fff !important;
+  text-shadow: none !important;
+}
+
+body.high-contrast .panel-kicker,
+body.high-contrast .menu-kicker,
+body.high-contrast .problem-theme,
+body.high-contrast .problem-subinfo,
+body.high-contrast .avatar-tag,
+body.high-contrast .team-counter-card span,
+body.high-contrast .team-counter-card strong,
+body.high-contrast .team-counter-card small,
+body.high-contrast .menu-stat-card span,
+body.high-contrast .menu-stat-card strong,
+body.high-contrast .problem-stat-chip span,
+body.high-contrast .problem-stat-chip strong,
+body.high-contrast .brief-stat-card span,
+body.high-contrast .brief-stat-card strong,
+body.high-contrast .brief-stat-card small,
+body.high-contrast .brief-chip,
+body.high-contrast .team-hint-panel,
+body.high-contrast .results-badge,
+body.high-contrast .loading-overlay__button,
+body.high-contrast .loading-overlay__panel,
+body.high-contrast #summary-section,
+body.high-contrast #summary-section *,
+body.high-contrast .brief-hero,
+body.high-contrast .brief-hero *,
+body.high-contrast .brief-panel,
+body.high-contrast .brief-panel *,
+body.high-contrast .results-message,
+body.high-contrast .results-message *,
+body.high-contrast .reflection-section,
+body.high-contrast .reflection-section *,
+body.high-contrast .score-label {
+  color: #fff !important;
+}
+
+body.high-contrast .panel-kicker,
+body.high-contrast .menu-kicker,
+body.high-contrast .avatar-tag,
+body.high-contrast .brief-chip,
+body.high-contrast .results-badge {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: none !important;
+}
+
+body.high-contrast .team-counter-card,
+body.high-contrast .menu-stat-card,
+body.high-contrast .problem-stat-chip,
+body.high-contrast .brief-stat-card,
+body.high-contrast .team-hint-panel,
+body.high-contrast .brief-hero,
+body.high-contrast .brief-panel,
+body.high-contrast #summary-section,
+body.high-contrast .reflection-section {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: none !important;
+}
+
+body.high-contrast .metric-value,
+body.high-contrast .score-value,
+body.high-contrast #impact-score,
+body.high-contrast #inclusivity-score,
+body.high-contrast #trust-score,
+body.high-contrast #final-impact,
+body.high-contrast #final-inclusivity,
+body.high-contrast #final-trust {
+  color: #ffff00 !important;
+}
+
+body.high-contrast #budget-score,
+body.high-contrast #final-budget {
+  color: #ffff00 !important;
+}
+
 @keyframes floatOrb {
   0%, 100% { transform: translate3d(0, 0, 0); }
   50% { transform: translate3d(0, 16px, 0); }

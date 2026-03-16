@@ -61,6 +61,92 @@ function getRoleMeta(name) {
   return { badge: 'Build', icon: 'DV' };
 }
 
+const AVATAR_PALETTES = [
+  ['#1776d2', '#53b4ff', '#cfe8ff'],
+  ['#129b67', '#56d58d', '#d8f8e6'],
+  ['#d59a1e', '#ffd66b', '#fff0c8'],
+  ['#9254de', '#d4a5ff', '#f1e4ff'],
+  ['#d94f70', '#ff8fb0', '#ffd8e3'],
+  ['#0f766e', '#4dd4c6', '#d5fbf6'],
+  ['#7c3aed', '#a78bfa', '#ece5ff'],
+  ['#b45309', '#f59e0b', '#ffeed6']
+];
+
+function hashRole(name) {
+  return Array.from(name).reduce((sum, char, index) => sum + (char.charCodeAt(0) * (index + 3)), 0);
+}
+
+function getRoleVisual(name) {
+  const lower = name.toLowerCase();
+  const byKeyword = [
+    ['frontend developer', { icon: '🖥️' }],
+    ['backend developer', { icon: '🗄️' }],
+    ['full stack developer', { icon: '🔗' }],
+    ['mobile app developer', { icon: '📱' }],
+    ['game developer', { icon: '🎮' }],
+    ['software engineer', { icon: '⚙️' }],
+    ['ai engineer', { icon: '🤖' }],
+    ['machine learning engineer', { icon: '🧠' }],
+    ['data scientist', { icon: '📊' }],
+    ['data analyst', { icon: '📈' }],
+    ['devops engineer', { icon: '🔄' }],
+    ['cloud engineer', { icon: '☁️' }],
+    ['site reliability engineer', { icon: '🛰️' }],
+    ['qa tester', { icon: '✅' }],
+    ['automation test engineer', { icon: '🧪' }],
+    ['cybersecurity specialist', { icon: '🛡️' }],
+    ['security engineer', { icon: '🔐' }],
+    ['privacy engineer', { icon: '🔒' }],
+    ['product manager', { icon: '🧭' }],
+    ['project manager', { icon: '📋' }],
+    ['technical program manager', { icon: '🗂️' }],
+    ['ux designer', { icon: '✨' }],
+    ['ui designer', { icon: '🎨' }],
+    ['accessibility specialist', { icon: '♿' }],
+    ['interaction designer', { icon: '🪄' }],
+    ['user researcher', { icon: '🔍' }],
+    ['marketing manager', { icon: '📣' }],
+    ['digital marketing specialist', { icon: '📢' }],
+    ['growth strategist', { icon: '🚀' }],
+    ['seo specialist', { icon: '🔎' }],
+    ['social media manager', { icon: '💬' }],
+    ['brand manager', { icon: '🏷️' }],
+    ['sales manager', { icon: '💼' }],
+    ['partnerships manager', { icon: '🤝' }],
+    ['business development manager', { icon: '🌱' }],
+    ['finance manager', { icon: '💷' }],
+    ['operations manager', { icon: '📦' }],
+    ['customer support lead', { icon: '🎧' }],
+    ['community manager', { icon: '🫶' }],
+    ['content creator', { icon: '🎬' }],
+    ['technical writer', { icon: '✍️' }],
+    ['solutions architect', { icon: '🏗️' }],
+    ['database administrator', { icon: '🗃️' }],
+    ['infrastructure engineer', { icon: '🏭' }],
+    ['compliance officer', { icon: '📜' }],
+    ['ethics advisor', { icon: '⚖️' }]
+  ];
+
+  const matched = byKeyword.find(([keyword]) => lower.includes(keyword));
+  return matched ? matched[1] : { icon: '💡' };
+}
+
+function getRoleStyle(name) {
+  const hash = hashRole(name);
+  const palette = AVATAR_PALETTES[hash % AVATAR_PALETTES.length];
+  const dotOne = 8 + (hash % 18);
+  const dotTwo = 10 + ((hash >> 2) % 16);
+  const dotThree = 14 + ((hash >> 3) % 14);
+  return [
+    `--avatar-primary:${palette[0]}`,
+    `--avatar-secondary:${palette[1]}`,
+    `--avatar-surface:${palette[2]}`,
+    `--orbit-dot-one:${dotOne}%`,
+    `--orbit-dot-two:${dotTwo}%`,
+    `--orbit-dot-three:${dotThree}%`
+  ].join(';');
+}
+
 function getRoleSummary(name) {
   const lower = name.toLowerCase();
   if (lower.includes('security') || lower.includes('privacy') || lower.includes('compliance')) return 'Protects the product from legal, data, and trust risks.';
@@ -76,12 +162,15 @@ function renderTeamMembers() {
 
   container.innerHTML = TEAM_ROLES.map((name) => {
     const meta = getRoleMeta(name);
+    const visual = getRoleVisual(name);
     return `
-      <label class="avatar-card avatar-card--team">
+      <label class="avatar-card avatar-card--team" style="${getRoleStyle(name)}">
         <input type="checkbox" name="team-member" value="${name}" onchange="updateTeamCount()">
         <div class="avatar-orbit"></div>
         <div class="avatar-visual">
-          <div class="avatar-icon">${meta.icon}</div>
+          <div class="avatar-icon">
+            <span class="avatar-emoji" aria-hidden="true">${visual.icon}</span>
+          </div>
           <div class="avatar-glow"></div>
         </div>
         <div class="avatar-tag">${meta.badge}</div>

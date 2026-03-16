@@ -1801,6 +1801,34 @@ button:focus-visible {
   background: linear-gradient(90deg, #1776d2, #53b4ff, #56d58d, #ffd66b);
 }
 
+.loading-overlay__page-hint {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(720px, calc(100vw - 32px));
+  text-align: center;
+  color: #dbeafe;
+  font-family: "Cavolini", "Segoe Print", "Comic Sans MS", cursive;
+  font-size: 1.08rem;
+  line-height: 1.2;
+  z-index: 230;
+}
+
+.loading-overlay__hint {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 56px);
+  text-align: center;
+  color: #46627f;
+  font-family: "Cavolini", "Segoe Print", "Comic Sans MS", cursive;
+  font-size: 1.05rem;
+  line-height: 1.2;
+  z-index: 4;
+}
+
 .loading-overlay__scene {
   position: absolute;
   top: 50%;
@@ -2135,6 +2163,8 @@ body.high-contrast .team-hint-panel,
 body.high-contrast .results-badge,
 body.high-contrast .loading-overlay__button,
 body.high-contrast .loading-overlay__panel,
+body.high-contrast .loading-overlay__hint,
+body.high-contrast .loading-overlay__page-hint,
 body.high-contrast #summary-section,
 body.high-contrast #summary-section *,
 body.high-contrast .brief-hero,

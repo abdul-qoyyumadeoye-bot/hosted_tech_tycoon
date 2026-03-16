@@ -46,6 +46,7 @@
       loadingOverlay.className = "loading-overlay";
       loadingOverlay.setAttribute("aria-hidden", "true");
       loadingOverlay.innerHTML = `
+        <div class="loading-overlay__page-hint">Scroll down to see the loading page correctly</div>
         <div class="loading-overlay__panel">
           <div class="loading-overlay__scene" aria-hidden="true">
             <div class="loading-orbit loading-orbit--outer"></div>

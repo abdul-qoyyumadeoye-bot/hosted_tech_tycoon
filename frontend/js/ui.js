@@ -4,11 +4,17 @@
   let fxLayer;
   let dayOverlay;
   let loadingOverlay;
+  let dayOverlayTimer = null;
   const LOADING_SESSION_KEY = "techtycoon_loading_target";
   const LOADING_DURATION_MS = 6000;
+  const REDUCED_LOADING_DURATION_MS = 260;
 
   function reducedMotion() {
     return reducedMotionQuery.matches;
+  }
+
+  function loadingDuration() {
+    return reducedMotion() ? REDUCED_LOADING_DURATION_MS : LOADING_DURATION_MS;
   }
 
   function ensureLayers() {
@@ -169,7 +175,7 @@
     if (pendingTarget) {
       sessionStorage.removeItem(LOADING_SESSION_KEY);
       showLoadingOverlay(formatLoadingLabel(pendingTarget));
-      window.setTimeout(hideLoadingOverlay, reducedMotion() ? 120 : LOADING_DURATION_MS);
+      window.setTimeout(hideLoadingOverlay, loadingDuration());
     }
     requestAnimationFrame(() => document.body.classList.add("page-ready"));
     setupNavigationInterception();
@@ -191,13 +197,16 @@
 
   function navigate(url) {
     if (!url) return false;
+    sessionStorage.setItem(LOADING_SESSION_KEY, url);
+    showLoadingOverlay(formatLoadingLabel(url));
+
     if (reducedMotion()) {
-      window.location.href = url;
+      window.setTimeout(() => {
+        window.location.href = url;
+      }, 40);
       return true;
     }
 
-    sessionStorage.setItem(LOADING_SESSION_KEY, url);
-    showLoadingOverlay(formatLoadingLabel(url));
     document.body.classList.add("page-exit");
     window.setTimeout(() => {
       window.location.href = url;
@@ -206,13 +215,14 @@
   }
 
   function transitionBack() {
+    sessionStorage.setItem(LOADING_SESSION_KEY, "back");
+    showLoadingOverlay("Loading previous stage");
+
     if (reducedMotion()) {
-      window.history.back();
+      window.setTimeout(() => window.history.back(), 40);
       return true;
     }
 
-    sessionStorage.setItem(LOADING_SESSION_KEY, "back");
-    showLoadingOverlay("Loading previous stage");
     document.body.classList.add("page-exit");
     window.setTimeout(() => window.history.back(), 320);
     return true;
@@ -299,14 +309,22 @@
     title.textContent = `Day ${day}`;
     meta.textContent = `${remaining} day${remaining === 1 ? "" : "s"} remaining${deadlineLabel ? ` until ${deadlineLabel}` : ""}`;
 
+    if (dayOverlayTimer) {
+      window.clearTimeout(dayOverlayTimer);
+      dayOverlayTimer = null;
+    }
+
     dayOverlay.classList.remove("is-tense");
     if (tense) dayOverlay.classList.add("is-tense");
+    dayOverlay.classList.remove("is-visible");
+    void dayOverlay.offsetWidth;
     dayOverlay.classList.add("is-visible");
     dayOverlay.setAttribute("aria-hidden", "false");
 
-    window.setTimeout(() => {
+    dayOverlayTimer = window.setTimeout(() => {
       dayOverlay.classList.remove("is-visible");
       dayOverlay.setAttribute("aria-hidden", "true");
+      dayOverlayTimer = null;
     }, reducedMotion() ? 700 : 1300);
   }
 
@@ -338,7 +356,7 @@
     showDayOverlay,
     showLoadingOverlay,
     hideLoadingOverlay,
-    loadingDuration: () => LOADING_DURATION_MS,
+    loadingDuration,
     reducedMotion
   };
 })();

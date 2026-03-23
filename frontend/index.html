@@ -63,7 +63,8 @@
 
         <div class="form-group">
           <label for="team-name">Team name</label>
-          <input type="text" id="team-name" placeholder="Enter your team name" value="Techgrine">
+          <input type="text" id="team-name" placeholder="Enter your team name" maxlength="10" aria-describedby="team-name-error">
+          <p id="team-name-error" class="form-error" role="alert" aria-live="polite"></p>
         </div>
       </div>
     </section>

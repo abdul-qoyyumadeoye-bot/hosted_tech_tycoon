@@ -42,7 +42,9 @@ function animateFinalScores() {
     el.dataset.value = '0';
     window.TechTycoonUI?.animateValue(el, metric.value, {
       duration: metric.currency ? 0 : (window.TechTycoonUI?.reducedMotion() ? 0 : 700),
-      formatter: metric.currency ? (value) => '$' + Math.round(value).toLocaleString() : (value) => String(Math.round(value)),
+      formatter: metric.currency
+        ? (value) => '$' + Math.round(value).toLocaleString()
+        : (value) => `${String(Math.round(value))} /100`,
       pulseClass: metric.currency ? 'neutral' : 'positive'
     });
   });
@@ -195,9 +197,12 @@ function renderDecisionsSummary() {
     return;
   }
 
-  const html = '<ul style="list-style: none; padding: 0; margin: 0;">' + gameState.data.choices.map((choice, idx) => `
+  const html = '<ul style="list-style: none; padding: 0; margin: 0;">' + gameState.data.choices.map((choice, idx) => {
+    const rawTitle = getStageTitleById(choice.stageId);
+    const shortTitle = rawTitle.replace(/^Stage\s*\d+\s*[:\-]\s*/i, '');
+    return `
     <li class="results-block" style="margin-bottom: 12px; padding: 14px 16px; background: rgba(255,255,255,0.86); border: 1px solid rgba(15,23,42,0.08); border-left: 4px solid #3b82f6; border-radius: 16px; box-shadow: 0 10px 22px rgba(16, 32, 51, 0.06);">
-      <strong>Stage ${idx + 1} – ${getStageTitleById(choice.stageId)}:</strong> ${choice.choiceText}
+      <strong>Stage ${idx + 1} – ${shortTitle}:</strong> ${choice.choiceText}
       <br><small style="color: #6b7280;">
         Impact: ${choice.effects.impact > 0 ? '+' : ''}${choice.effects.impact}, 
         Inclusivity: ${choice.effects.inclusivity > 0 ? '+' : ''}${choice.effects.inclusivity}, 
@@ -205,7 +210,8 @@ function renderDecisionsSummary() {
         Budget: ${window.TechTycoonUI?.formatCurrency(choice.effects.budget) || ('$' + choice.effects.budget.toLocaleString())}
       </small>
     </li>
-  `).join('') + '</ul>';
+  `;
+  }).join('') + '</ul>';
 
   container.innerHTML = html;
 }

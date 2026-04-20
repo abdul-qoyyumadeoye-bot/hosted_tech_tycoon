@@ -243,8 +243,8 @@ Consider implementing:
 ## Quick Reference: Adding New Responsive Content
 
 When adding new components, follow this pattern:
-
-```css
+ 
+.```css
 /* Desktop first */
 .my-component {
   font-size: 16px;

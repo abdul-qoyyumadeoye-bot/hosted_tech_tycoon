@@ -190,26 +190,20 @@ function renderTeamMembers() {
 
 function updateTeamCount() {
   const selectedInputs = Array.from(document.querySelectorAll('input[name="team-member"]:checked'));
-  const selectedCount = selectedInputs.length;
-  document.getElementById('count').textContent = selectedCount;
+  let selectedCount = selectedInputs.length;
 
+  // Prevent selecting more than max by unchecking the excess
   if (selectedCount > TEAM_SELECTION.max) {
     const last = selectedInputs[selectedInputs.length - 1];
     if (last) last.checked = false;
-    window.TechTycoonUI?.showNotification({
-      title: 'Team limit reached',
-      message: `You can only select up to ${TEAM_SELECTION.max} team members.`,
-      type: 'warning'
-    });
+    selectedCount = TEAM_SELECTION.max;
   }
 
-  const currentCount = document.querySelectorAll('input[name="team-member"]:checked').length;
+  document.getElementById('count').textContent = selectedCount;
+
+  const currentCount = selectedCount;
   const continueBtn = document.getElementById('continue-btn');
   continueBtn.disabled = !(currentCount >= TEAM_SELECTION.min && currentCount <= TEAM_SELECTION.max);
-
-  document.querySelectorAll('input[name="team-member"]:not(:checked)').forEach(input => {
-    input.disabled = currentCount >= TEAM_SELECTION.max;
-  });
 
   document.querySelectorAll('.avatar-card').forEach(card => {
     const input = card.querySelector('input[type="checkbox"]');
@@ -224,11 +218,17 @@ function showSuggestedTeam() {
   if (!hint) return;
 
   if (suggested.length) {
-    hint.innerHTML = `<strong>Suggested Team:</strong> ${suggested.slice(0, TEAM_SELECTION.max).join(', ')}`;
+    hint.innerHTML = `<button class="hint-close" aria-label="Close suggestion">&times;</button><strong>Suggested Team:</strong> ${suggested.slice(0, TEAM_SELECTION.max).join(', ')}`;
   } else {
-    hint.textContent = 'No suggested team provided for this scenario.';
+    hint.innerHTML = `<button class="hint-close" aria-label="Close suggestion">&times;</button>No suggested team provided for this scenario.`;
   }
   hint.style.display = 'block';
+
+  const closeBtn = hint.querySelector('.hint-close');
+  closeBtn.addEventListener('click', () => {
+    hint.style.display = 'none';
+  });
+
   window.TechTycoonUI?.showNotification({ title: 'Team suggestion ready', message: 'Use it as a starting point, not a requirement.', type: 'info' });
 }
 

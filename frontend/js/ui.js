@@ -23,7 +23,16 @@
       notificationStack.className = "notification-stack";
       notificationStack.setAttribute("aria-live", "polite");
       notificationStack.setAttribute("aria-atomic", "true");
-      document.body.appendChild(notificationStack);
+      notificationStack.style.position = "absolute";
+      notificationStack.style.top = "20px";
+      notificationStack.style.right = "18px";
+      notificationStack.style.zIndex = "9999";
+      notificationStack.style.width = "min(360px, calc(100vw - 28px))";
+      notificationStack.style.maxHeight = "60vh";
+      notificationStack.style.overflowY = "auto";
+      notificationStack.style.pointerEvents = "none";
+      const overlayRoot = document.getElementById("notification-page") || document.body;
+      overlayRoot.appendChild(notificationStack);
     }
 
     if (!fxLayer) {
@@ -65,8 +74,8 @@
             <span class="loading-node loading-node--gold"></span>
             <span class="loading-node loading-node--green"></span>
             <div class="loading-grid"></div>
+            <div class="loading-overlay__label">Loading...</div>
           </div>
-          <button class="loading-overlay__button" type="button" tabindex="-1">Loading next stage</button>
         </div>
       `;
       document.body.appendChild(loadingOverlay);
@@ -230,19 +239,18 @@
 
   function formatLoadingLabel(url) {
     const file = (url || "").split("/").pop() || "";
-    if (file.includes("stage")) return "Loading next stage";
     if (file.includes("results")) return "Compiling results";
     if (file.includes("brief")) return "Preparing mission brief";
     if (file.includes("team")) return "Building your team board";
     if (file.includes("problem")) return "Loading scenarios";
-    return "Loading";
+    return "Loading...";
   }
 
-  function showLoadingOverlay(label = "Loading next stage") {
+  function showLoadingOverlay(label = "Loading...") {
     ensureLayers();
     if (!loadingOverlay) return;
-    const button = loadingOverlay.querySelector(".loading-overlay__button");
-    if (button) button.textContent = label;
+    const labelElement = loadingOverlay.querySelector(".loading-overlay__label");
+    if (labelElement) labelElement.textContent = label;
     document.documentElement.classList.add("loading-lock");
     document.body.classList.add("loading-lock");
     loadingOverlay.classList.add("is-visible");
@@ -257,7 +265,7 @@
     document.body.classList.remove("loading-lock");
   }
 
-  function showNotification({ title, message = "", type = "info", duration = 2600 }) {
+  function showNotification({ title, message = "", type = "info", duration = 10000 }) {
     ensureLayers();
     const card = document.createElement("article");
     card.className = `sim-notification sim-notification--${type}`;
@@ -270,8 +278,10 @@
     requestAnimationFrame(() => card.classList.add("is-visible"));
 
     window.setTimeout(() => {
-      card.classList.remove("is-visible");
-      window.setTimeout(() => card.remove(), reducedMotion() ? 0 : 300);
+      if (card.parentNode) {
+        card.classList.remove("is-visible");
+        window.setTimeout(() => card.remove(), reducedMotion() ? 0 : 300);
+      }
     }, reducedMotion() ? 1200 : duration);
   }
 
@@ -302,12 +312,24 @@
     }, reducedMotion() ? 900 : 1400);
   }
 
-  function showDayOverlay({ day, remaining, deadlineLabel = "", tense = false }) {
+  function showDayOverlay({ day, remaining, deadlineLabel = "", tense = false, effects = null }) {
     ensureLayers();
     const title = dayOverlay.querySelector(".day-overlay__title");
     const meta = dayOverlay.querySelector(".day-overlay__meta");
     title.textContent = `Day ${day}`;
-    meta.textContent = `${remaining} day${remaining === 1 ? "" : "s"} remaining${deadlineLabel ? ` until ${deadlineLabel}` : ""}`;
+
+    const effectSummary = effects
+      ? ['impact', 'inclusivity', 'trust', 'budget'].map((metric) => {
+          const value = effects[metric];
+          if (value === undefined || value === 0) return null;
+          if (metric === 'budget') {
+            return `${value > 0 ? '+' : ''}$${value.toLocaleString()}`;
+          }
+          return `${metric.charAt(0).toUpperCase() + metric.slice(1)} ${value > 0 ? '+' : ''}${value}`;
+        }).filter(Boolean).join(' · ')
+      : '';
+
+    meta.textContent = `${remaining} day${remaining === 1 ? "" : "s"} remaining${deadlineLabel ? ` until ${deadlineLabel}` : ""}${effectSummary ? ` · ${effectSummary}` : ""}`;
 
     if (dayOverlayTimer) {
       window.clearTimeout(dayOverlayTimer);

@@ -516,6 +516,27 @@ body.high-contrast .metric-card.budget-card .metric-value {
   color: #ffff00;
 }
 
+body.high-contrast .results-block,
+body.high-contrast .results-message,
+body.high-contrast .reflection-section,
+body.high-contrast .stage-header,
+body.high-contrast .choice-card,
+body.high-contrast .day-overlay__panel {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+body.high-contrast .results-block {
+  box-shadow: none;
+}
+
+body.high-contrast .choice-description,
+body.high-contrast .day-overlay__meta,
+body.high-contrast .day-overlay__title {
+  color: #ffffff;
+}
+
 body.high-contrast .btn-primary {
   background: #ffff00;
   color: #000000;
@@ -1657,25 +1678,78 @@ button:focus-visible {
   border-radius: 22px;
 }
 
-.notification-stack {
+.notification-page {
   position: fixed;
-  top: 92px;
-  right: 18px;
-  z-index: 140;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+}
+
+.notification-page .notification-stack,
+.notification-stack {
+  position: absolute !important;
+  top: 20px !important;
+  right: 18px !important;
+  bottom: auto !important;
+  left: auto !important;
+  z-index: 99999 !important;
   display: grid;
   gap: 10px;
   width: min(360px, calc(100vw - 28px));
+  max-height: 60vh;
+  overflow-y: auto;
+  pointer-events: none;
 }
 
 .sim-notification {
   padding: 14px 16px;
   border-radius: 16px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: var(--tt-shadow);
+  border: 2px solid rgba(15, 23, 42, 0.2);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16);
   transform: translateX(30px);
   opacity: 0;
   transition: transform 220ms ease, opacity 220ms ease;
+  animation: none;
+  position: relative;
+  pointer-events: none;
+}
+
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: #526175;
+  transition: background 0.2s ease;
+}
+
+.notification-close:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.hint-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: #526175;
+  transition: background 0.2s ease;
+}
+
+.hint-close:hover {
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .sim-notification strong {
@@ -1781,7 +1855,7 @@ button:focus-visible {
   opacity: 0;
   z-index: 150;
   transition: opacity 220ms ease;
-  background: rgba(17, 25, 40, 0.16);
+  background: rgba(17, 25, 40, 0.10);
   backdrop-filter: blur(5px);
 }
 
@@ -1984,27 +2058,21 @@ button:focus-visible {
 }
 
 .loading-overlay__button {
+  display: none;
+}
+
+.loading-overlay__label {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  min-width: 230px;
-  padding: 15px 30px;
-  border: 0;
-  border-radius: 999px;
-    background: linear-gradient(135deg, #1d4ed8, #2563eb, #3b82f6);
-    color: #fff;
-    font: inherit;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    box-shadow: 0 20px 36px rgba(59, 130, 246, 0.24);
-  padding: 28px 24px;
-  border-radius: 24px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 249, 255, 0.94));
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  box-shadow: 0 30px 80px rgba(16, 32, 51, 0.18);
-  transform: translateY(12px) scale(0.96);
-  transition: transform 260ms ease;
+  width: 100%;
+  bottom: 18px;
+  left: 0;
+  color: #102033;
+  font-weight: 800;
+  font-size: 0.92rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  pointer-events: none;
 }
 
 .day-overlay.is-visible .day-overlay__panel {
@@ -2038,11 +2106,12 @@ button:focus-visible {
   font-size: 1rem;
   color: #526175;
 }
-
-@media (max-width: 768px) {
-  .notification-stack {
-    top: auto;
-    right: 12px;
+  .choice-description {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #475569;
+  }
     bottom: 84px;
     width: calc(100vw - 24px);
   }
@@ -2116,7 +2185,7 @@ button:focus-visible {
 @media (max-width: 480px) {
   .notification-stack {
     right: 10px;
-    bottom: 78px;
+    top: 20px;
     width: calc(100vw - 20px);
   }
 
@@ -2288,6 +2357,49 @@ body.high-contrast li {
   color: #fff !important;
 }
 
+body.high-contrast .sim-notification--warning {
+  border: 2px solid #ffff00 !important;
+  border-left: 5px solid #ffff00 !important;
+}
+
+body.high-contrast .sim-notification--success {
+  border: 2px solid #00ff00 !important;
+  border-left: 5px solid #00ff00 !important;
+}
+
+body.high-contrast .sim-notification--danger {
+  border: 2px solid #ff6666 !important;
+  border-left: 5px solid #ff6666 !important;
+}
+
+body.high-contrast .sim-notification--info {
+  border: 2px solid #00ffff !important;
+  border-left: 5px solid #00ffff !important;
+}
+
+body.high-contrast .sim-notification strong {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+body.high-contrast .notification-close,
+body.high-contrast .hint-close {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+body.high-contrast .notification-close:hover,
+body.high-contrast .hint-close:hover {
+  background: #ccc !important;
+}
+
+body.high-contrast .results-block {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: none !important;
+}
+
 body.high-contrast h1,
 body.high-contrast h2,
 body.high-contrast h3,
@@ -2376,6 +2488,22 @@ body.high-contrast #final-trust {
 body.high-contrast #budget-score,
 body.high-contrast #final-budget {
   color: #ffff00 !important;
+}
+
+body.high-contrast .day-overlay__panel {
+  background: transparent !important;
+  border: 2px solid #ffffff !important;
+}
+
+body.high-contrast .loading-overlay__label {
+  color: #ffffff !important;
+}
+
+body.high-contrast .day-overlay__eyebrow,
+body.high-contrast .day-overlay__title,
+body.high-contrast .day-overlay__meta,
+body.high-contrast .loading-overlay__label {
+  color: #ffffff !important;
 }
 
 @keyframes floatOrb {
@@ -2478,6 +2606,8 @@ body.high-contrast #final-budget {
   border: 1px solid rgba(15,23,42,0.08);
   border-radius: 18px;
   box-shadow: 0 12px 24px rgba(16, 32, 51, 0.08);
+  position: relative;
+  padding: 14px 16px;
 }
 
 .menu-stat-card,
@@ -2485,6 +2615,14 @@ body.high-contrast #final-budget {
 .team-counter-card {
   padding: 14px 16px;
   min-width: 140px;
+}
+
+.team-counter-card {
+  position: fixed;
+  top: 20px;
+  right: 18px;
+  z-index: 40;
+  width: min(200px, calc(100vw - 36px));
 }
 
 .menu-stat-card span,

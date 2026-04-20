@@ -95,11 +95,12 @@ class GameState {
     this.save();
   }
 
-  recordChoice(stageId, choiceText, effects) {
+  recordChoice(stageId, choiceText, effects, choiceIndex = null) {
     this.data.choices.push({
       stageId,
       choiceText,
       effects,
+      choiceIndex,
       timestamp: new Date().toISOString()
     });
     this.save();

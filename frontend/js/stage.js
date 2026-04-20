@@ -20,6 +20,16 @@ function isTenseStage(stage) {
   return /(crisis|fault|issue|complaint|warning|breach|bias|security|unexpected)/.test(source);
 }
 
+function generateChoiceDescription(choice) {
+  if (choice.description) return choice.description;
+  const effects = [];
+  if (choice.effects.impact) effects.push(`Impact ${choice.effects.impact > 0 ? '+' : ''}${choice.effects.impact}`);
+  if (choice.effects.inclusivity) effects.push(`Inclusivity ${choice.effects.inclusivity > 0 ? '+' : ''}${choice.effects.inclusivity}`);
+  if (choice.effects.trust) effects.push(`Trust ${choice.effects.trust > 0 ? '+' : ''}${choice.effects.trust}`);
+  if (choice.effects.budget) effects.push(`${choice.effects.budget > 0 ? 'Gain' : 'Spend'} $${Math.abs(choice.effects.budget).toLocaleString()}`);
+  return effects.length ? effects.join(' · ') : 'A smart decision for this stage.';
+}
+
 function updateDeadlineStrip() {
   if (!currentProblem) return;
   const total = Number(currentProblem.totalDays || 0);
@@ -69,6 +79,7 @@ function renderStage() {
       ${currentStage.choices.map((choice, idx) => `
         <button class="choice-card" data-choice-index="${idx}">
           <div class="choice-text">${choice.text}</div>
+          <div class="choice-description">${generateChoiceDescription(choice)}</div>
           <div style="margin: 8px 0 10px 0; font-size: 13px; color: #374151;">
             Time Cost: ${stageTime} day${stageTime !== 1 ? 's' : ''} | Day After Choice: Day ${dayAfterChoice} | Days Remaining After Choice: ${daysLeftAfterChoice}
           </div>
@@ -92,18 +103,41 @@ function renderStage() {
   updateDeadlineStrip();
   window.TechTycoonUI?.revealElements(stageContent);
 
+  const nextBtn = document.getElementById('next-btn');
   selectedStageChoiceIndex = null;
-  document.getElementById('next-btn').disabled = true;
+  nextBtn.disabled = true;
 
-  stageContent.querySelectorAll('[data-choice-index]').forEach((button) => {
+  const stageButtons = stageContent.querySelectorAll('[data-choice-index]');
+  stageButtons.forEach((button) => {
     button.addEventListener('click', () => selectStageChoice(Number(button.dataset.choiceIndex), button));
   });
 
+  const completedChoice = gameState.data.choices[gameState.data.stageIndex];
+  const stageLocked = Boolean(completedChoice && completedChoice.stageId === currentStage.id);
+
+  if (stageLocked) {
+    selectedStageChoiceIndex = completedChoice.choiceIndex != null ? completedChoice.choiceIndex : null;
+    nextBtn.disabled = false;
+    stageButtons.forEach((button) => {
+      const index = Number(button.dataset.choiceIndex);
+      button.classList.toggle('selected', index === selectedStageChoiceIndex);
+      button.disabled = true;
+      button.setAttribute('aria-disabled', 'true');
+    });
+    const note = document.createElement('div');
+    note.className = 'stage-locked-note';
+    note.textContent = 'This stage has already been completed. You can review the choice but not change it.';
+    stageContent.querySelector('.stage-header')?.appendChild(note);
+  }
+
   const prevBtn = document.getElementById('prev-btn');
-  prevBtn.style.display = gameState.data.stageIndex > 0 ? 'block' : 'none';
+  if (prevBtn) {
+    prevBtn.style.display = 'none';
+  }
 }
 
 function selectStageChoice(choiceIndex, button) {
+  if (gameState.data.choices[gameState.data.stageIndex]?.stageId === currentStage.id) return;
   selectedStageChoiceIndex = choiceIndex;
   document.querySelectorAll('.choice-card').forEach((card) => card.classList.toggle('selected', Number(card.dataset.choiceIndex) === choiceIndex));
   document.getElementById('next-btn').disabled = false;
@@ -111,6 +145,12 @@ function selectStageChoice(choiceIndex, button) {
 
 function continueStage() {
   if (selectedStageChoiceIndex === null) return;
+  const completedChoice = gameState.data.choices[gameState.data.stageIndex];
+  if (completedChoice && completedChoice.stageId === currentStage.id) {
+    gameState.goToStage(gameState.data.stageIndex + 1);
+    renderStage();
+    return;
+  }
   makeChoice(selectedStageChoiceIndex);
 }
 
@@ -127,7 +167,7 @@ async function makeChoice(choiceIndex, button) {
 
   button?.classList.add('selected');
 
-  gameState.recordChoice(currentStage.id, choice.text, choice.effects);
+  gameState.recordChoice(currentStage.id, choice.text, choice.effects, choiceIndex);
   gameState.applyChoiceEffects(choice.effects);
   gameState.data.currentDay = nextDay;
   gameState.save();
@@ -152,7 +192,8 @@ async function makeChoice(choiceIndex, button) {
     day: nextDay,
     remaining: daysRemaining,
     deadlineLabel: currentProblem.launchDeadline || `Day ${totalDays}`,
-    tense
+    tense,
+    effects: choice.effects
   });
 
   await wait(window.TechTycoonUI?.reducedMotion() ? 120 : 950);
@@ -169,11 +210,45 @@ async function makeChoice(choiceIndex, button) {
     return;
   }
 
-  window.TechTycoonUI?.showLoadingOverlay('Loading next stage');
+  window.TechTycoonUI?.showLoadingOverlay();
   await wait(window.TechTycoonUI?.reducedMotion() ? 80 : (window.TechTycoonUI?.loadingDuration?.() || 12000));
   gameState.goToStage(gameState.data.stageIndex + 1);
   renderStage();
   window.TechTycoonUI?.hideLoadingOverlay?.();
+}
+
+function updateMetricsDisplay(previousScores = null, effects = null) {
+  const metrics = [
+    { id: 'impact-score', value: gameState.data.scores.impact, currency: false },
+    { id: 'inclusivity-score', value: gameState.data.scores.inclusivity, currency: false },
+    { id: 'trust-score', value: gameState.data.scores.trust, currency: false },
+    { id: 'budget-score', value: gameState.data.scores.budget, currency: true }
+  ];
+
+  metrics.forEach((metric) => {
+    const el = document.getElementById(metric.id);
+    if (!el) return;
+
+    const previousValue = previousScores ? previousScores[metric.id.replace('-score', '')] : metric.value;
+    el.dataset.value = String(previousValue);
+
+    const pulse = effects
+      ? ((metric.id === 'budget-score' ? effects.budget : effects[metric.id.replace('-score', '')]) > 0 ? 'positive' : ((metric.id === 'budget-score' ? effects.budget : effects[metric.id.replace('-score', '')]) < 0 ? 'negative' : 'neutral'))
+      : 'neutral';
+
+    window.TechTycoonUI?.animateValue(el, metric.value, {
+      duration: metric.currency ? 0 : (window.TechTycoonUI?.reducedMotion() ? 0 : 520),
+      formatter: metric.currency
+        ? (value) => '$' + Math.round(value).toLocaleString()
+        : (value) => `${String(Math.round(value))} /100`,
+      pulseClass: pulse
+    });
+  });
+
+  const baseEl = document.getElementById('budget-base');
+  if (baseEl) {
+    baseEl.textContent = `of $${(gameState.data.initialBudget || 0).toLocaleString()}`;
+  }
 }
 
 function showChoiceFeedback(effects, tense, daysRemaining, button) {
@@ -200,35 +275,6 @@ function showChoiceFeedback(effects, tense, daysRemaining, button) {
   const title = tense ? 'Crisis response logged' : 'Decision locked in';
   const message = `Day ${gameState.data.currentDay} complete. Budget remaining: ${window.TechTycoonUI?.formatCurrency(gameState.data.scores.budget) || ('$' + gameState.data.scores.budget.toLocaleString())}.`;
   window.TechTycoonUI?.showNotification({ title, message, type });
-}
-
-function updateMetricsDisplay(previousScores = null, effects = null) {
-  const metrics = [
-    { id: 'impact-score', value: gameState.data.scores.impact, currency: false },
-    { id: 'inclusivity-score', value: gameState.data.scores.inclusivity, currency: false },
-    { id: 'trust-score', value: gameState.data.scores.trust, currency: false },
-    { id: 'budget-score', value: gameState.data.scores.budget, currency: true }
-  ];
-
-  metrics.forEach((metric) => {
-    const el = document.getElementById(metric.id);
-    if (!el) return;
-
-    const previousValue = previousScores ? previousScores[metric.id.replace('-score', '')] : metric.value;
-    el.dataset.value = String(previousValue);
-
-    const pulse = effects
-      ? ((metric.id === 'budget-score' ? effects.budget : effects[metric.id.replace('-score', '')]) > 0 ? 'positive' : ((metric.id === 'budget-score' ? effects.budget : effects[metric.id.replace('-score', '')]) < 0 ? 'negative' : 'neutral'))
-      : 'neutral';
-
-    window.TechTycoonUI?.animateValue(el, metric.value, {
-      duration: metric.currency ? 0 : (window.TechTycoonUI?.reducedMotion() ? 0 : 520),
-      formatter: metric.currency
-        ? (value) => '$' + Math.round(value).toLocaleString()
-        : (value) => String(Math.round(value)),
-      pulseClass: pulse
-    });
-  });
 }
 
 function prevStage() {

@@ -46,6 +46,11 @@ function animateFinalScores() {
       pulseClass: metric.currency ? 'neutral' : 'positive'
     });
   });
+
+  const baseEl = document.getElementById('final-budget-base');
+  if (baseEl) {
+    baseEl.textContent = `of $${(gameState.data.initialBudget || 0).toLocaleString()}`;
+  }
 }
 
 function revealResultBlocks() {
@@ -71,10 +76,19 @@ function renderAchievements() {
   container.innerHTML = badges.map((badge) => `<div class="results-badge">${badge}</div>`).join('');
 }
 
+function getStageTitleById(stageId) {
+  return gameState.data.problem?.stages?.find(stage => stage.id === stageId)?.title || 'a stage';
+}
+
 function generateResultsMessage() {
   const problem = gameState.data.problem;
   const { impact, inclusivity, trust, budget } = gameState.data.scores;
   const average = (impact + inclusivity + trust) / 3;
+  const spent = (gameState.data.initialBudget || 0) - budget;
+  const topExpense = gameState.data.choices.reduce((max, choice) => {
+    const cost = Math.abs(choice.effects?.budget || 0);
+    return cost > max.cost ? { cost, stageId: choice.stageId, text: choice.choiceText } : max;
+  }, { cost: 0, stageId: null, text: '' });
 
   let message = '';
 
@@ -84,16 +98,16 @@ function generateResultsMessage() {
     const overtime = Math.max(0, currentDay - totalDays);
     message = `<strong>Time Up: Project Closed</strong><br>
     Deadline was Day ${totalDays}${problem?.launchDeadline ? ` (${problem.launchDeadline})` : ''}. Your team reached Day ${currentDay}.${overtime > 0 ? ` You were ${overtime} day${overtime !== 1 ? 's' : ''} late.` : ''}<br>
-    Final status: Impact ${impact}, Inclusivity ${inclusivity}, Trust ${trust}, Budget $${budget.toLocaleString()}.<br>
-    The launch window ended before you could continue, so the project has been closed.`;
+    Final status: Impact ${impact}, Inclusivity ${inclusivity}, Trust ${trust}, Budget $${budget.toLocaleString()} of $${(gameState.data.initialBudget || 0).toLocaleString()}.<br>
+    The launch window ended before you could continue. Your choices in ${getStageTitleById(topExpense.stageId)} used your runway quickly.`;
   } else if (gameState.data.gameStatus === 'incomplete') {
-    message = `<strong>Project Incomplete:</strong> Your team ran out of budget before completing all planned work. Despite your efforts to deliver impact (Impact: ${impact}), maintain inclusivity (Inclusivity: ${inclusivity}), and preserve stakeholder trust (Trust: ${trust}), financial constraints forced the project to halt.`;
+    message = `<strong>Project Incomplete:</strong> Your team ran out of budget before completing all planned work. You spent $${spent.toLocaleString()} and ended with $${budget.toLocaleString()} remaining. The decision in ${getStageTitleById(topExpense.stageId)} had the largest budget impact.`;
   } else if (average >= 75 && trust >= 70 && budget > 0) {
-    message = `<strong>Excellent Leadership:</strong> Your team navigated this crisis with remarkable balance. You prioritized inclusive solutions (Inclusivity: ${inclusivity}), maintained strong stakeholder relationships (Trust: ${trust}), and delivered real impact (Impact: ${impact}). Schools and advocacy groups are praising your commitment to do the right thing. You've emerged stronger.`;
+    message = `<strong>Excellent Leadership:</strong> Your team navigated this crisis with remarkable balance. You prioritized inclusive solutions (Inclusivity: ${inclusivity}), maintained strong stakeholder relationships (Trust: ${trust}), and delivered real impact (Impact: ${impact}). You finished with $${budget.toLocaleString()} remaining from $${(gameState.data.initialBudget || 0).toLocaleString()}.`;
   } else if (average >= 55 && trust >= 50 && budget > 0) {
-    message = `<strong>Solid Crisis Management:</strong> You made reasonable trade-offs and kept your team together. Impact: ${impact}, Inclusivity: ${inclusivity}, Trust: ${trust}. While not perfect, you demonstrated thoughtful decision-making under pressure. There's room to improve, but you prevented disaster.`;
+    message = `<strong>Solid Crisis Management:</strong> You made reasonable trade-offs and kept your team together. Impact: ${impact}, Inclusivity: ${inclusivity}, Trust: ${trust}. After spending $${spent.toLocaleString()}, you still had $${budget.toLocaleString()} left. The biggest spend came during ${getStageTitleById(topExpense.stageId)}.`;
   } else {
-    message = `<strong>Difficult Choices:</strong> You faced impossible trade-offs. Your scores (Impact: ${impact}, Inclusivity: ${inclusivity}, Trust: ${trust}) reflect the painful reality that every choice had costs. Perhaps some problems have no perfect answer, only different ways to struggle.`;
+    message = `<strong>Difficult Choices:</strong> Your scores (Impact: ${impact}, Inclusivity: ${inclusivity}, Trust: ${trust}) show the trade-offs you made. You finished with $${budget.toLocaleString()} remaining from $${(gameState.data.initialBudget || 0).toLocaleString()}. Reflect on the choice in ${getStageTitleById(topExpense.stageId)} and how it shifted your budget most dramatically.`;
   }
 
   return message;
@@ -120,43 +134,55 @@ function generateReprimands() {
 
 function generateReflectionQuestions() {
   const { impact, inclusivity, trust, budget } = gameState.data.scores;
+  const choices = gameState.data.choices || [];
   const questions = [];
 
-  if (gameState.data.gameStatus === 'incomplete') {
-    questions.push('Looking back, where did you prioritize spending? Which decisions cost the most?');
-    questions.push('If you could go back, how would you allocate your budget differently?');
-    questions.push('What would have happened if you had made more conservative choices earlier?');
-    questions.push('What does it feel like to fail due to resource constraints rather than poor leadership?');
-    return questions;
+  const budgetChanges = choices.map(choice => ({
+    stageId: choice.stageId,
+    text: choice.choiceText,
+    change: choice.effects?.budget || 0
+  }));
+  const largestBudgetChange = budgetChanges.reduce((prev, current) => Math.abs(current.change) > Math.abs(prev.change) ? current : prev, { change: 0 });
+
+  const metricChanges = choices.flatMap(choice => Object.entries(choice.effects || {}).filter(([metric]) => metric !== 'budget').map(([metric, value]) => ({
+    stageId: choice.stageId,
+    text: choice.choiceText,
+    metric,
+    change: value
+  })));
+  const largestMetricMove = metricChanges.reduce((prev, current) => Math.abs(current.change) > Math.abs(prev.change) ? current : prev, { change: 0 });
+
+  if (choices.length) {
+    questions.push(`In ${getStageTitleById(choices[0].stageId)}, you chose “${choices[0].choiceText}”. How did that early decision shape the rest of your run?`);
+    if (largestBudgetChange.change !== 0) {
+      questions.push(`Which decision had the biggest budget impact (${largestBudgetChange.change < 0 ? 'spent' : 'saved'} $${Math.abs(largestBudgetChange.change).toLocaleString()}) in ${getStageTitleById(largestBudgetChange.stageId)}? Could another choice have preserved more runway?`);
+    }
+    if (largestMetricMove.change !== 0) {
+      const direction = largestMetricMove.change > 0 ? 'increased' : 'decreased';
+      const metricName = largestMetricMove.metric.charAt(0).toUpperCase() + largestMetricMove.metric.slice(1);
+      questions.push(`During ${getStageTitleById(largestMetricMove.stageId)}, your ${metricName} ${direction} by ${Math.abs(largestMetricMove.change)}. What drove that change, and would you make the same choice again?`);
+    }
   }
 
   if (inclusivity < 50) {
-    questions.push('Whose needs got left behind in your decisions? How might you have prioritized inclusivity differently?');
+    questions.push('Which choices made inclusivity harder to achieve? How might a different path have supported a broader group of users or students?');
   } else {
-    questions.push('What choices did you make specifically to center inclusivity? How did that affect your other metrics?');
+    questions.push('Which stage decisions most clearly boosted inclusivity? How did those choices affect your other goals?');
   }
 
   if (trust < 50) {
-    questions.push('How did transparency factor into your decisions? What would have been needed to restore public trust?');
+    questions.push('Which decision caused the biggest trust drop? How could you rebuild confidence with stakeholders after that stage?');
   } else {
-    questions.push('Which decisions helped maintain stakeholder trust? Why was that important to preserve?');
+    questions.push('Which decision helped preserve trust, and why was that especially important at that point?');
   }
 
-  if (impact < 50) {
-    questions.push('Did you focus too much on process and not enough on solving the core problem? How might you have moved faster?');
+  if (budget <= 0) {
+    questions.push('What would you change if you had to keep the project alive without any budget left?');
   } else {
-    questions.push('How did you balance speed with quality? What kept you focused on delivering real results?');
+    questions.push(`You ended with $${budget.toLocaleString()} remaining. Which stage had the most influence on your remaining runway?`);
   }
 
-  if (budget < 0) {
-    questions.push('Looking back, where did you overspend? Which solutions were not worth the cost?');
-  } else if (budget > gameState.data.initialBudget * 0.5) {
-    questions.push('Why did you spend conservatively? Were you missing opportunities to do more?');
-  } else {
-    questions.push('How well did you allocate your limited budget? Did every pound spent generate proportional value?');
-  }
-
-  questions.push('If you could go back and change one decision, which would it be and why?');
+  questions.push('Looking back across all stages, which one choice would you change to improve your final result?');
 
   return questions;
 }
@@ -171,7 +197,7 @@ function renderDecisionsSummary() {
 
   const html = '<ul style="list-style: none; padding: 0; margin: 0;">' + gameState.data.choices.map((choice, idx) => `
     <li class="results-block" style="margin-bottom: 12px; padding: 14px 16px; background: rgba(255,255,255,0.86); border: 1px solid rgba(15,23,42,0.08); border-left: 4px solid #3b82f6; border-radius: 16px; box-shadow: 0 10px 22px rgba(16, 32, 51, 0.06);">
-      <strong>Decision ${idx + 1}:</strong> ${choice.choiceText}
+      <strong>Stage ${idx + 1} – ${getStageTitleById(choice.stageId)}:</strong> ${choice.choiceText}
       <br><small style="color: #6b7280;">
         Impact: ${choice.effects.impact > 0 ? '+' : ''}${choice.effects.impact}, 
         Inclusivity: ${choice.effects.inclusivity > 0 ? '+' : ''}${choice.effects.inclusivity}, 

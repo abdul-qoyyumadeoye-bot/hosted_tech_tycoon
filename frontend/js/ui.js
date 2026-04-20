@@ -6,7 +6,7 @@
   let loadingOverlay;
   let dayOverlayTimer = null;
   const LOADING_SESSION_KEY = "techtycoon_loading_target";
-  const LOADING_DURATION_MS = 6000;
+  const LOADING_DURATION_MS = 3000;
   const REDUCED_LOADING_DURATION_MS = 260;
 
   function reducedMotion() {

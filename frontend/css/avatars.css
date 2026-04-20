@@ -379,6 +379,12 @@
   transform: translateY(-2px);
 }
 
+.choice-card.selected {
+  background: #eff6ff;
+  border-color: #2563eb;
+  box-shadow: 0 6px 18px rgba(59, 130, 246, 0.18);
+}
+
 .choice-card:focus-within {
   outline: none;
   border-color: var(--primary-color);
@@ -476,6 +482,16 @@
 
 .score-value.budget {
   color: var(--primary-color);
+}
+
+.score-subtext {
+  margin-top: 8px;
+  font-size: 0.88rem;
+  color: #4b5563;
+}
+
+.avatar-card.disabled {
+  opacity: 0.55;
 }
 
 .reflection-section {

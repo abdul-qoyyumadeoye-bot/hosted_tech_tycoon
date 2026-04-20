@@ -19,7 +19,7 @@
       "stages": [
         {
           "id": "market-research",
-          "title": "Stage 1 â€” Market Research",
+          "title": "Stage 1: Market Research",
           "time": 4,
           "description": "You must decide how to validate the idea with students.",
           "choices": [
@@ -29,7 +29,7 @@
         },
         {
           "id": "core-development",
-          "title": "Stage 2 â€” Core System Development",
+          "title": "Stage 2: Core System Development",
           "time": 8,
           "description": "The team begins building the core scheduling engine.",
           "choices": [
@@ -39,7 +39,7 @@
         },
         {
           "id": "ux-design",
-          "title": "Stage 3 â€” User Experience Design",
+          "title": "Stage 3: User Experience Design",
           "time": 6,
           "description": "The UX team works on improving usability.",
           "choices": [
@@ -49,7 +49,7 @@
         },
         {
           "id": "accessibility-complaint",
-          "title": "Stage 4 â€” Unexpected Issue: Accessibility Complaint",
+          "title": "Stage 4: Unexpected Issue: Accessibility Complaint",
           "time": 3,
           "description": "During testing, visually impaired students report difficulty navigating the interface.",
           "choices": [
@@ -59,7 +59,7 @@
         },
         {
           "id": "security-review",
-          "title": "Stage 5 â€” Security & Privacy Review",
+          "title": "Stage 5: Security & Privacy Review",
           "time": 4,
           "description": "Your app stores personal student data, raising privacy concerns.",
           "choices": [
@@ -69,7 +69,7 @@
         },
         {
           "id": "marketing-campaign",
-          "title": "Stage 6 â€” Marketing Campaign",
+          "title": "Stage 6: Marketing Campaign",
           "time": 7,
           "description": "You must promote the app before launch.",
           "choices": [
@@ -79,7 +79,7 @@
         },
         {
           "id": "final-launch",
-          "title": "Stage 7 â€” Final Launch Decision",
+          "title": "Stage 7: Final Launch Decision",
           "time": 2,
           "description": "The app is almost ready.",
           "choices": [
@@ -108,7 +108,7 @@
       "stages": [
         {
           "id": "dataset",
-          "title": "Stage 1 â€” Dataset Collection",
+          "title": "Stage 1: Dataset Collection",
           "time": 6,
           "description": "You must collect training data for the AI moderation system.",
           "choices": [
@@ -118,7 +118,7 @@
         },
         {
           "id": "build-ai",
-          "title": "Stage 2 â€” Build AI Moderation System",
+          "title": "Stage 2: Build AI Moderation System",
           "time": 9,
           "description": "The AI model is developed.",
           "choices": [
@@ -128,7 +128,7 @@
         },
         {
           "id": "integration",
-          "title": "Stage 3 â€” Platform Integration",
+          "title": "Stage 3: Platform Integration",
           "time": 6,
           "description": "You must integrate the system with gaming platforms.",
           "choices": [
@@ -138,7 +138,7 @@
         },
         {
           "id": "bias-issue",
-          "title": "Stage 4 â€” Crisis: AI Bias Issue",
+          "title": "Stage 4: Crisis: AI Bias Issue",
           "time": 4,
           "description": "The system incorrectly flags messages from certain dialects.",
           "choices": [
@@ -148,7 +148,7 @@
         },
         {
           "id": "security",
-          "title": "Stage 5 â€” Security Infrastructure",
+          "title": "Stage 5: Security Infrastructure",
           "time": 5,
           "description": "Protect the platform from attacks.",
           "choices": [
@@ -158,7 +158,7 @@
         },
         {
           "id": "partnerships",
-          "title": "Stage 6 â€” Industry Partnerships",
+          "title": "Stage 6: Industry Partnerships",
           "time": 8,
           "description": "Choose who to team up with.",
           "choices": [
@@ -168,7 +168,7 @@
         },
         {
           "id": "final-launch",
-          "title": "Stage 7 â€” Final Launch",
+          "title": "Stage 7: Final Launch",
           "time": 2,
           "description": "Decide on the scale of release.",
           "choices": [

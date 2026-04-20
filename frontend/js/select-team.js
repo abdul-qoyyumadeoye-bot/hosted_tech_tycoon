@@ -147,6 +147,11 @@ function getRoleStyle(name) {
   ].join(';');
 }
 
+const TEAM_SELECTION = {
+  min: 4,
+  max: 5
+};
+
 function getRoleSummary(name) {
   const lower = name.toLowerCase();
   if (lower.includes('security') || lower.includes('privacy') || lower.includes('compliance')) return 'Protects the product from legal, data, and trust risks.';
@@ -188,17 +193,28 @@ function updateTeamCount() {
   const selectedCount = selectedInputs.length;
   document.getElementById('count').textContent = selectedCount;
 
-  if (selectedCount > 5) {
-    selectedInputs[selectedInputs.length - 1].checked = false;
+  if (selectedCount > TEAM_SELECTION.max) {
+    const last = selectedInputs[selectedInputs.length - 1];
+    if (last) last.checked = false;
+    window.TechTycoonUI?.showNotification({
+      title: 'Team limit reached',
+      message: `You can only select up to ${TEAM_SELECTION.max} team members.`,
+      type: 'warning'
+    });
   }
 
   const currentCount = document.querySelectorAll('input[name="team-member"]:checked').length;
   const continueBtn = document.getElementById('continue-btn');
-  continueBtn.disabled = !(currentCount === 4 || currentCount === 5);
+  continueBtn.disabled = !(currentCount >= TEAM_SELECTION.min && currentCount <= TEAM_SELECTION.max);
+
+  document.querySelectorAll('input[name="team-member"]:not(:checked)').forEach(input => {
+    input.disabled = currentCount >= TEAM_SELECTION.max;
+  });
 
   document.querySelectorAll('.avatar-card').forEach(card => {
     const input = card.querySelector('input[type="checkbox"]');
     card.classList.toggle('selected', Boolean(input && input.checked));
+    card.classList.toggle('disabled', Boolean(input && input.disabled));
   });
 }
 
@@ -208,7 +224,7 @@ function showSuggestedTeam() {
   if (!hint) return;
 
   if (suggested.length) {
-    hint.innerHTML = `<strong>Suggested Team:</strong> ${suggested.join(', ')}`;
+    hint.innerHTML = `<strong>Suggested Team:</strong> ${suggested.slice(0, TEAM_SELECTION.max).join(', ')}`;
   } else {
     hint.textContent = 'No suggested team provided for this scenario.';
   }

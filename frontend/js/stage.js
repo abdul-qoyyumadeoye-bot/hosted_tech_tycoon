@@ -4,6 +4,7 @@
 
 let currentProblem = null;
 let currentStage = null;
+let selectedStageChoiceIndex = null;
 
 function getCurrentStage() {
   if (!currentProblem) return null;
@@ -91,12 +92,26 @@ function renderStage() {
   updateDeadlineStrip();
   window.TechTycoonUI?.revealElements(stageContent);
 
+  selectedStageChoiceIndex = null;
+  document.getElementById('next-btn').disabled = true;
+
   stageContent.querySelectorAll('[data-choice-index]').forEach((button) => {
-    button.addEventListener('click', () => makeChoice(Number(button.dataset.choiceIndex), button));
+    button.addEventListener('click', () => selectStageChoice(Number(button.dataset.choiceIndex), button));
   });
 
   const prevBtn = document.getElementById('prev-btn');
   prevBtn.style.display = gameState.data.stageIndex > 0 ? 'block' : 'none';
+}
+
+function selectStageChoice(choiceIndex, button) {
+  selectedStageChoiceIndex = choiceIndex;
+  document.querySelectorAll('.choice-card').forEach((card) => card.classList.toggle('selected', Number(card.dataset.choiceIndex) === choiceIndex));
+  document.getElementById('next-btn').disabled = false;
+}
+
+function continueStage() {
+  if (selectedStageChoiceIndex === null) return;
+  makeChoice(selectedStageChoiceIndex);
 }
 
 async function makeChoice(choiceIndex, button) {
@@ -241,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
   renderStage();
+  document.getElementById('next-btn')?.addEventListener('click', continueStage);
   const remaining = Math.max(0, Number(gameState.data.totalDays || 0) - Number(gameState.data.currentDay || 0));
   window.TechTycoonUI?.showDayOverlay({
     day: Number(gameState.data.currentDay || 0),

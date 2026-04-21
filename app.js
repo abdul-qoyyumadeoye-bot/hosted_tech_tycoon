@@ -340,24 +340,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Accessibility settings
-  const settings = { highContrast:false, bigText:false, tts:false };
+  const settings = { highContrast:true, bigText:false, tts:false };
 
   function createAccessibilityPanel(){
     const panel = document.createElement('div');
     panel.id = 'accessibility-panel';
 
     panel.innerHTML = `
-      <label><input type="checkbox" id="ac-contrast"> High contrast</label>
       <label><input type="checkbox" id="ac-bigtext"> Larger text</label>
       <label><input type="checkbox" id="ac-tts"> Text-to-speech (TTS)</label>
       <div style="margin-top:8px"><button id="ac-read">Read current stage</button></div>
     `;
     document.body.appendChild(panel);
 
-    document.getElementById('ac-contrast').addEventListener('change', (e)=>{
-      settings.highContrast = e.target.checked;
-      document.documentElement.classList.toggle('high-contrast', settings.highContrast);
-    });
     document.getElementById('ac-bigtext').addEventListener('change', (e)=>{
       settings.bigText = e.target.checked;
       document.documentElement.classList.toggle('big-text', settings.bigText);

@@ -170,7 +170,7 @@ function renderTeamMembers() {
     const visual = getRoleVisual(name);
     return `
       <label class="avatar-card avatar-card--team" style="${getRoleStyle(name)}">
-        <input type="checkbox" name="team-member" value="${name}" onchange="updateTeamCount()">
+        <input type="checkbox" name="team-member" value="${name}" onchange="updateTeamCount(this)">
         <div class="avatar-orbit"></div>
         <div class="avatar-visual">
           <div class="avatar-icon">
@@ -186,29 +186,41 @@ function renderTeamMembers() {
   }).join('');
 
   window.TechTycoonUI?.revealElements(container);
+
+  container.addEventListener('click', (e) => {
+    const card = e.target.closest('.avatar-card');
+    if (!card) return;
+    const input = card.querySelector('input[type="checkbox"]');
+    if (input && input.disabled) {
+      window.TechTycoonUI?.showNotification({
+        title: 'Team full',
+        message: `You can only select a maximum of ${TEAM_SELECTION.max} team members. Unselect one to pick someone else.`,
+        type: 'warning'
+      });
+    }
+  });
 }
 
-function updateTeamCount() {
+function updateTeamCount(changedInput) {
   const selectedInputs = Array.from(document.querySelectorAll('input[name="team-member"]:checked'));
   let selectedCount = selectedInputs.length;
 
-  // Prevent selecting more than max by unchecking the excess
   if (selectedCount > TEAM_SELECTION.max) {
-    const last = selectedInputs[selectedInputs.length - 1];
-    if (last) last.checked = false;
+    if (changedInput) changedInput.checked = false;
     selectedCount = TEAM_SELECTION.max;
   }
 
   document.getElementById('count').textContent = selectedCount;
 
-  const currentCount = selectedCount;
   const continueBtn = document.getElementById('continue-btn');
-  continueBtn.disabled = !(currentCount >= TEAM_SELECTION.min && currentCount <= TEAM_SELECTION.max);
+  continueBtn.disabled = !(selectedCount >= TEAM_SELECTION.min && selectedCount <= TEAM_SELECTION.max);
 
+  const atMax = selectedCount >= TEAM_SELECTION.max;
   document.querySelectorAll('.avatar-card').forEach(card => {
     const input = card.querySelector('input[type="checkbox"]');
-    card.classList.toggle('selected', Boolean(input && input.checked));
-    card.classList.toggle('disabled', Boolean(input && input.disabled));
+    const isChecked = Boolean(input && input.checked);
+    card.classList.toggle('selected', isChecked);
+    if (input) input.disabled = atMax && !isChecked;
   });
 }
 

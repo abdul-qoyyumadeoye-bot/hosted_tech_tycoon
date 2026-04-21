@@ -14,9 +14,10 @@ class AccessibilityManager {
   loadSettings() {
     try {
       const stored = localStorage.getItem('techtycoon_accessibility');
-      return stored ? JSON.parse(stored) : { highContrast: false, bigText: false, tts: false };
+      const parsed = stored ? JSON.parse(stored) : {};
+      return { highContrast: true, bigText: parsed.bigText || false, tts: parsed.tts || false };
     } catch {
-      return { highContrast: false, bigText: false, tts: false };
+      return { highContrast: true, bigText: false, tts: false };
     }
   }
 
@@ -63,15 +64,6 @@ class AccessibilityManager {
     const bigTextToggle = document.getElementById('big-text-toggle');
     const ttsToggle = document.getElementById('tts-toggle');
     const readAloudBtn = document.getElementById('read-aloud-btn');
-
-    if (contrastToggle) {
-      contrastToggle.checked = this.settings.highContrast;
-      contrastToggle.addEventListener('change', () => {
-        this.settings.highContrast = contrastToggle.checked;
-        this.saveSettings();
-        this.applySettings();
-      });
-    }
 
     if (bigTextToggle) {
       bigTextToggle.checked = this.settings.bigText;

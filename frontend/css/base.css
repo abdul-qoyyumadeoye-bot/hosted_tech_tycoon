@@ -1687,10 +1687,9 @@ button:focus-visible {
 
 .notification-page .notification-stack,
 .notification-stack {
-  position: absolute !important;
-  top: 20px !important;
+  position: fixed !important;
+  bottom: 20px !important;
   right: 18px !important;
-  bottom: auto !important;
   left: auto !important;
   z-index: 99999 !important;
   display: grid;
@@ -2185,7 +2184,7 @@ button:focus-visible {
 @media (max-width: 480px) {
   .notification-stack {
     right: 10px;
-    top: 20px;
+    bottom: 20px;
     width: calc(100vw - 20px);
   }
 
@@ -2493,6 +2492,12 @@ body.high-contrast #final-budget {
 body.high-contrast .day-overlay__panel {
   background: transparent !important;
   border: 2px solid #ffffff !important;
+}
+
+body.high-contrast .loading-overlay__panel {
+  background: #000000 !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: none !important;
 }
 
 body.high-contrast .loading-overlay__label {

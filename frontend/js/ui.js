@@ -23,16 +23,15 @@
       notificationStack.className = "notification-stack";
       notificationStack.setAttribute("aria-live", "polite");
       notificationStack.setAttribute("aria-atomic", "true");
-      notificationStack.style.position = "absolute";
-      notificationStack.style.top = "20px";
+      notificationStack.style.position = "fixed";
+      notificationStack.style.bottom = "20px";
       notificationStack.style.right = "18px";
       notificationStack.style.zIndex = "9999";
       notificationStack.style.width = "min(360px, calc(100vw - 28px))";
       notificationStack.style.maxHeight = "60vh";
       notificationStack.style.overflowY = "auto";
       notificationStack.style.pointerEvents = "none";
-      const overlayRoot = document.getElementById("notification-page") || document.body;
-      overlayRoot.appendChild(notificationStack);
+      document.body.appendChild(notificationStack);
     }
 
     if (!fxLayer) {
@@ -74,8 +73,8 @@
             <span class="loading-node loading-node--gold"></span>
             <span class="loading-node loading-node--green"></span>
             <div class="loading-grid"></div>
-            <div class="loading-overlay__label">Loading...</div>
           </div>
+          <div class="loading-overlay__label" role="status" aria-live="polite">Loading...</div>
         </div>
       `;
       document.body.appendChild(loadingOverlay);

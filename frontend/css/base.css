@@ -2105,6 +2105,13 @@ button:focus-visible {
   font-size: 1rem;
   color: #526175;
 }
+  .choice-brief {
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #64748b;
+  }
+
   .choice-description {
     margin-top: 8px;
     font-size: 13px;
@@ -2705,6 +2712,39 @@ body.high-contrast .loading-overlay__label {
 .team-hint-panel {
   margin: 12px 0 18px;
   padding: 16px;
+}
+
+.team-limit-bar {
+  position: absolute;
+  top: 72px;
+  right: 18px;
+  z-index: 99998;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  background: #000;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-left: 5px solid #c98418;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16);
+  color: #fff;
+  font-size: 0.9rem;
+  max-width: min(360px, calc(100vw - 36px));
+  opacity: 0;
+  transform: translateX(30px);
+  transition: transform 220ms ease, opacity 220ms ease;
+  pointer-events: none;
+}
+
+.team-limit-bar.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.team-limit-bar__icon {
+  flex-shrink: 0;
+  color: #f5a623;
 }
 
 .problem-stat-row {

@@ -79,6 +79,7 @@ function renderStage() {
       ${currentStage.choices.map((choice, idx) => `
         <button class="choice-card" data-choice-index="${idx}">
           <div class="choice-text">${choice.text}</div>
+          ${choice.brief ? `<div class="choice-brief">${choice.brief}</div>` : ''}
           <div class="choice-description">${generateChoiceDescription(choice)}</div>
           <div style="margin: 8px 0 10px 0; font-size: 13px; color: #374151;">
             Time Cost: ${stageTime} day${stageTime !== 1 ? 's' : ''} | Day After Choice: Day ${dayAfterChoice} | Days Remaining After Choice: ${daysLeftAfterChoice}

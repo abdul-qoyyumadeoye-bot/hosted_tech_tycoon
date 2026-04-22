@@ -171,12 +171,14 @@ function renderTeamMembers() {
     return `
       <label class="avatar-card avatar-card--team" style="${getRoleStyle(name)}">
         <input type="checkbox" name="team-member" value="${name}" onchange="updateTeamCount(this)">
-        <div class="avatar-orbit"></div>
+        <div class="avatar-orbit avatar-orbit--outer"></div>
+        <div class="avatar-orbit avatar-orbit--mid"></div>
+        <div class="avatar-orbit avatar-orbit--inner"></div>
         <div class="avatar-visual">
           <div class="avatar-icon">
+            <div class="avatar-hub-pulse"></div>
             <span class="avatar-emoji" aria-hidden="true">${visual.icon}</span>
           </div>
-          <div class="avatar-glow"></div>
         </div>
         <div class="avatar-tag">${meta.badge}</div>
         <div class="avatar-name">${name}</div>
@@ -192,11 +194,7 @@ function renderTeamMembers() {
     if (!card) return;
     const input = card.querySelector('input[type="checkbox"]');
     if (input && input.disabled) {
-      window.TechTycoonUI?.showNotification({
-        title: 'Team full',
-        message: `You can only select a maximum of ${TEAM_SELECTION.max} team members. Unselect one to pick someone else.`,
-        type: 'warning'
-      });
+      showLimitBar();
     }
   });
 }
@@ -216,6 +214,8 @@ function updateTeamCount(changedInput) {
   continueBtn.disabled = !(selectedCount >= TEAM_SELECTION.min && selectedCount <= TEAM_SELECTION.max);
 
   const atMax = selectedCount >= TEAM_SELECTION.max;
+
+
   document.querySelectorAll('.avatar-card').forEach(card => {
     const input = card.querySelector('input[type="checkbox"]');
     const isChecked = Boolean(input && input.checked);
@@ -256,7 +256,27 @@ function selectTeam() {
   window.TechTycoonUI?.navigate('stage.html') || (window.location.href = 'stage.html');
 }
 
+function showLimitBar() {
+  const limitBar = document.getElementById('team-limit-bar');
+  if (!limitBar) return;
+  clearTimeout(limitBar._hideTimer);
+  limitBar.style.top = (window.scrollY + 72) + 'px';
+  limitBar.style.display = 'flex';
+  requestAnimationFrame(() => limitBar.classList.add('is-visible'));
+  limitBar._hideTimer = setTimeout(() => {
+    limitBar.classList.remove('is-visible');
+    setTimeout(() => { limitBar.style.display = 'none'; }, 220);
+  }, 3000);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   renderTeamMembers();
   document.getElementById('team-hint-btn')?.addEventListener('click', showSuggestedTeam);
+
+  window.addEventListener('scroll', () => {
+    const limitBar = document.getElementById('team-limit-bar');
+    if (limitBar && limitBar.style.display === 'flex') {
+      limitBar.style.top = (window.scrollY + 72) + 'px';
+    }
+  });
 });

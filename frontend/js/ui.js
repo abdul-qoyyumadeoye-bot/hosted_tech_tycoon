@@ -264,7 +264,7 @@
     document.body.classList.remove("loading-lock");
   }
 
-  function showNotification({ title, message = "", type = "info", duration = 10000 }) {
+  function showNotification({ title, message = "", type = "info", duration = 3000 }) {
     ensureLayers();
     const card = document.createElement("article");
     card.className = `sim-notification sim-notification--${type}`;

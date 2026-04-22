@@ -112,12 +112,6 @@
 }
 
 .avatar-card--team {
-  --avatar-primary: #1776d2;
-  --avatar-secondary: #53b4ff;
-  --avatar-surface: #cfe8ff;
-  --orbit-dot-one: 14%;
-  --orbit-dot-two: 18%;
-  --orbit-dot-three: 20%;
   justify-content: flex-start;
   min-height: 260px;
   padding: 26px 18px 20px;
@@ -125,65 +119,115 @@
   text-align: center;
   isolation: isolate;
   background:
-    radial-gradient(circle at top, color-mix(in srgb, var(--avatar-secondary) 24%, white), transparent 36%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(236, 245, 255, 0.92));
+    linear-gradient(180deg, rgba(247, 249, 255, 0.98), rgba(229, 239, 255, 0.94));
+  border: 1px solid rgba(59, 130, 246, 0.18);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
+/* vertical grid line through orbit centre */
+.avatar-card--team::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: unset !important;
+  top: 18px !important;
+  left: 50% !important;
+  width: 1px !important;
+  height: 132px !important;
+  background: rgba(23, 118, 210, 0.08) !important;
+  transform: translateX(-50%) !important;
+  border-radius: 0 !important;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* horizontal grid line through orbit centre */
 .avatar-card--team::after {
   content: "";
   position: absolute;
-  inset: auto -12% -38% auto;
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(25, 169, 116, 0.2), transparent 70%);
-  z-index: 0;
-}
-
-.avatar-orbit {
-  position: absolute;
-  top: 18px;
+  display: block;
+  inset: unset;
+  top: 84px; /* orbit top 18px + half of 132px */
   left: 50%;
   width: 132px;
-  height: 132px;
-  border: 1px solid rgba(23, 118, 210, 0.18);
-  border-radius: 50%;
+  height: 1px;
+  background: rgba(23, 118, 210, 0.08);
   transform: translateX(-50%);
+  border-radius: 0;
+  pointer-events: none;
   z-index: 0;
-  animation: avatarOrbitSpin 16s linear infinite;
 }
 
-.avatar-orbit::before,
-.avatar-orbit::after,
-.avatar-visual::before {
+/* ---- orbit rings ---- */
+.avatar-orbit {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.avatar-orbit--outer {
+  top: 18px;
+  width: 132px;
+  height: 132px;
+  border: 1px solid rgba(23, 118, 210, 0.22);
+  animation: avatarOrbitSpin 8s linear infinite;
+}
+
+.avatar-orbit--mid {
+  top: 34px;
+  width: 100px;
+  height: 100px;
+  border: 1px dashed rgba(83, 180, 255, 0.32);
+  animation: avatarOrbitSpin 6.5s linear infinite reverse;
+}
+
+.avatar-orbit--inner {
+  top: 50px;
+  width: 68px;
+  height: 68px;
+  border: 1px solid rgba(86, 213, 141, 0.32);
+  animation: avatarOrbitSpin 4.8s linear infinite;
+}
+
+/* colored orbit nodes */
+.avatar-orbit--outer::before {
   content: "";
   position: absolute;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--avatar-primary), var(--avatar-secondary));
-}
-
-.avatar-orbit::before {
-  width: 12px;
-  height: 12px;
-  top: var(--orbit-dot-one);
-  left: 12px;
-}
-
-.avatar-orbit::after {
   width: 10px;
   height: 10px;
-  right: var(--orbit-dot-two);
-  bottom: 14px;
+  border-radius: 50%;
+  top: 10%;
+  left: 8px;
+  background: linear-gradient(135deg, #1776d2, #53b4ff);
+  box-shadow: 0 0 6px rgba(23, 118, 210, 0.5);
 }
 
-.avatar-visual::before {
+.avatar-orbit--mid::before {
+  content: "";
+  position: absolute;
   width: 8px;
   height: 8px;
-  top: 12px;
-  right: var(--orbit-dot-three);
-  opacity: 0.86;
+  border-radius: 50%;
+  bottom: 10%;
+  right: 6px;
+  background: linear-gradient(135deg, #d59a1e, #ffd66b);
+  box-shadow: 0 0 6px rgba(213, 154, 30, 0.5);
 }
 
+.avatar-orbit--inner::before {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  top: 6px;
+  right: 50%;
+  background: linear-gradient(135deg, #129b67, #56d58d);
+  box-shadow: 0 0 6px rgba(18, 155, 103, 0.5);
+}
+
+/* ---- hub / icon ---- */
 .avatar-visual {
   position: relative;
   width: 122px;
@@ -195,33 +239,39 @@
 }
 
 .avatar-card--team .avatar-icon {
-  width: 96px;
-  height: 96px;
+  width: 80px;
+  height: 80px;
   margin-bottom: 0;
-  padding: 12px 10px;
-  background: linear-gradient(135deg, var(--avatar-primary), var(--avatar-secondary));
-  box-shadow: 0 16px 28px color-mix(in srgb, var(--avatar-primary) 30%, transparent);
+  padding: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.98) 0%, rgba(233, 244, 255, 0.92) 62%, rgba(207, 227, 248, 0.72) 100%);
+  box-shadow:
+    0 12px 28px rgba(16, 32, 51, 0.14),
+    inset 0 0 0 1px rgba(23, 118, 210, 0.1);
   position: relative;
   z-index: 2;
   display: grid;
   place-items: center;
 }
 
-.avatar-emoji {
-  font-size: 34px;
-  line-height: 1;
-  filter: drop-shadow(0 4px 10px rgba(15, 23, 42, 0.16));
-}
-
-.avatar-glow {
+.avatar-hub-pulse {
   position: absolute;
-  inset: 22px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.78), color-mix(in srgb, var(--avatar-secondary) 26%, white) 62%, transparent 74%);
-  filter: blur(6px);
-  z-index: 1;
+  border: 1.5px solid rgba(23, 118, 210, 0.2);
+  animation: loadingPulse 2.1s ease-in-out infinite;
+  pointer-events: none;
 }
 
+.avatar-emoji {
+  font-size: 28px;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 2px 6px rgba(15, 23, 42, 0.14));
+}
+
+/* ---- labels ---- */
 .avatar-card--team .avatar-tag,
 .avatar-card--team .avatar-name,
 .avatar-card--team .avatar-description {
@@ -237,13 +287,21 @@
   max-width: 22ch;
 }
 
-.avatar-card--team.selected .avatar-orbit {
-  border-color: color-mix(in srgb, var(--avatar-primary) 38%, white);
-  box-shadow: 0 0 0 10px color-mix(in srgb, var(--avatar-primary) 10%, transparent);
+/* selected state */
+.avatar-card--team.selected {
+  border-color: rgba(23, 118, 210, 0.42);
+  box-shadow: 0 20px 40px rgba(23, 118, 210, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-.avatar-card--team.selected .avatar-glow {
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.82), color-mix(in srgb, var(--avatar-secondary) 34%, white) 58%, transparent 78%);
+.avatar-card--team.selected .avatar-orbit--outer {
+  border-color: rgba(23, 118, 210, 0.38);
+  box-shadow: 0 0 0 6px rgba(23, 118, 210, 0.06);
+}
+
+.avatar-card--team.selected .avatar-icon {
+  box-shadow:
+    0 12px 28px rgba(23, 118, 210, 0.22),
+    inset 0 0 0 1px rgba(23, 118, 210, 0.18);
 }
 
 /* ============================================================================
@@ -1349,7 +1407,12 @@ body.high-contrast .avatar-motif {
   color: #ffff00 !important;
 }
 
-body.high-contrast .avatar-orbit,
+body.high-contrast .avatar-orbit {
+  border-color: #ffffff !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
 body.high-contrast .avatar-orbit::before,
 body.high-contrast .avatar-orbit::after,
 body.high-contrast .avatar-visual::before {

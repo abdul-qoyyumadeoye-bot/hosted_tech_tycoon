@@ -1547,7 +1547,25 @@ body > * {
   animation: stripShimmer 5.5s linear infinite;
 }
 
+.deadline-strip {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #fff7ed;
+  border-left: 4px solid #f97316;
+  font-weight: 700;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+
 .score-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 12px;
   position: relative;
   isolation: isolate;
 }
@@ -3115,6 +3133,252 @@ body.page-ready .reveal-item {
 .metric-flash-negative,
 .metric-flash-neutral {
   animation: frontendHudPulse 760ms ease;
+}
+
+/* ============================================================================
+   MOBILE — comprehensive fixes (max-width: 600px)
+   ============================================================================ */
+@media (max-width: 600px) {
+  /* prevent horizontal scroll */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* ---- nav ---- */
+  .topnav-content {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 12px;
+    min-height: unset;
+  }
+
+  .topnav h1 {
+    flex: 1;
+    font-size: 14px;
+  }
+
+  .progress-bar-container {
+    order: 3;
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .access-btn {
+    flex-shrink: 0;
+  }
+
+  /* ---- main padding ---- */
+  .main-container {
+    padding: 10px 10px 80px;
+  }
+
+  /* ---- deadline strip ---- */
+  .deadline-strip {
+    font-size: 0.72rem;
+    padding: 8px 12px;
+  }
+
+  /* ---- score strip → 2×2 ---- */
+  .score-strip {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .score-strip .metric-card {
+    min-height: 72px;
+    gap: 4px;
+  }
+
+  .metric-card.budget-card {
+    grid-column: 1 / -1;
+  }
+
+  /* ---- stage container ---- */
+  .stage-container {
+    padding: 14px 12px;
+  }
+
+  .stage-header {
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+  }
+
+  /* ---- choices grid → single column ---- */
+  .choices-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .choice-card {
+    min-height: unset;
+    padding: 14px;
+  }
+
+  /* ---- team selection ---- */
+  .panel-intro--split {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+
+  .panel-kicker-row {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .team-counter-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    min-width: 0;
+    gap: 12px;
+  }
+
+  .selection-panel {
+    padding: 14px 12px;
+  }
+
+  /* ---- avatar grid → 2 columns ---- */
+  .avatar-grid--team {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+
+  /* ---- avatar card orbit — shrink for small cards ---- */
+  .avatar-card--team {
+    min-height: 200px;
+    padding: 16px 10px 14px;
+  }
+
+  .avatar-orbit--outer {
+    width: 96px;
+    height: 96px;
+    top: 14px;
+  }
+
+  .avatar-orbit--mid {
+    width: 72px;
+    height: 72px;
+    top: 26px;
+  }
+
+  .avatar-orbit--inner {
+    width: 48px;
+    height: 48px;
+    top: 38px;
+  }
+
+  /* recalculate crosshair lines */
+  .avatar-card--team::before {
+    height: 96px !important;
+    top: 14px !important;
+  }
+
+  .avatar-card--team::after {
+    top: 62px !important; /* 14 + 48 */
+    width: 96px !important;
+  }
+
+  .avatar-visual {
+    width: 86px;
+    height: 86px;
+  }
+
+  .avatar-card--team .avatar-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .avatar-emoji {
+    font-size: 22px;
+  }
+
+  .avatar-hub-pulse {
+    width: 32px;
+    height: 32px;
+  }
+
+  .avatar-name {
+    font-size: 11px;
+  }
+
+  .avatar-description {
+    font-size: 10px;
+    max-width: 18ch;
+  }
+
+  /* ---- problem/role cards → single column ---- */
+  .problem-grid,
+  .avatar-grid:not(.avatar-grid--team) {
+    grid-template-columns: 1fr !important;
+    gap: 10px;
+  }
+
+  /* ---- results ---- */
+  .Final-scores-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px;
+  }
+
+  .results-container {
+    padding: 14px 12px;
+  }
+
+  .results-title {
+    font-size: 20px;
+  }
+
+  /* ---- button group ---- */
+  .button-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  /* ---- nav footer ---- */
+  .nav-footer {
+    padding: 10px 12px;
+  }
+
+  /* ---- form label ---- */
+  .form-group label {
+    color: #ffffff;
+  }
+
+  /* ---- menu ---- */
+  .menu-panel {
+    padding: 16px 14px;
+  }
+
+  .menu-stat-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .menu-stat-card {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 0;
+  }
+
+  /* ---- how-to-play / brief ---- */
+  .brief-columns,
+  .brief-stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ---- hover cards — disable transform on touch ---- */
+  .choice-card:hover,
+  .avatar-card:hover,
+  .problem-card:hover,
+  .score-card:hover {
+    transform: none;
+  }
 }
 
 .day-overlay__panel {

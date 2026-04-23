@@ -152,6 +152,15 @@ const TEAM_SELECTION = {
   max: 5
 };
 
+const BADGE_DESCRIPTIONS = {
+  'Build':      'The people who write the code and ship the product. Without them, nothing gets built.',
+  'Ops':        'Keeps the project funded, on schedule, and pointed in the right direction.',
+  'Risk':       'Protects the product and its users from security threats, legal exposure, and data breaches.',
+  'Experience': 'Makes sure the product is easy, accessible, and genuinely useful for real people.',
+  'Insights':   'Turns data and AI into decisions that improve the product and spot problems early.',
+  'Growth':     'Gets the product in front of the right audience and builds lasting trust with users.',
+};
+
 function getRoleSummary(name) {
   const lower = name.toLowerCase();
   if (lower.includes('security') || lower.includes('privacy') || lower.includes('compliance')) return 'Protects the product from legal, data, and trust risks.';
@@ -180,7 +189,10 @@ function renderTeamMembers() {
             <span class="avatar-emoji" aria-hidden="true">${visual.icon}</span>
           </div>
         </div>
-        <div class="avatar-tag">${meta.badge}</div>
+        <div class="avatar-tag-row">
+          <div class="avatar-tag">${meta.badge}</div>
+          <button class="avatar-badge-info" data-badge="${meta.badge}" aria-label="What is ${meta.badge}?" tabindex="-1">i</button>
+        </div>
         <div class="avatar-name">${name}</div>
         <div class="avatar-description">${getRoleSummary(name)}</div>
       </label>
@@ -269,8 +281,37 @@ function showLimitBar() {
   }, 3000);
 }
 
+function initBadgeTooltips() {
+  const tooltip = document.getElementById('badge-hover-tooltip');
+  if (!tooltip) return;
+
+  document.addEventListener('mouseover', (e) => {
+    const btn = e.target.closest('.avatar-badge-info');
+    if (!btn) return;
+    const badge = btn.dataset.badge;
+    const desc = BADGE_DESCRIPTIONS[badge] || '';
+    tooltip.innerHTML = `<strong>${badge}</strong><p>${desc}</p>`;
+    const rect = btn.getBoundingClientRect();
+    tooltip.style.display = 'block';
+    const ttW = 220;
+    let left = rect.left + rect.width / 2 - ttW / 2;
+    left = Math.max(8, Math.min(left, window.innerWidth - ttW - 8));
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = (rect.top + window.scrollY - tooltip.offsetHeight - 10) + 'px';
+    tooltip.classList.add('is-visible');
+  });
+
+  document.addEventListener('mouseout', (e) => {
+    if (e.target.closest('.avatar-badge-info')) {
+      tooltip.classList.remove('is-visible');
+      setTimeout(() => { if (!tooltip.classList.contains('is-visible')) tooltip.style.display = 'none'; }, 180);
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   renderTeamMembers();
+  initBadgeTooltips();
   document.getElementById('team-hint-btn')?.addEventListener('click', showSuggestedTeam);
 
   window.addEventListener('scroll', () => {

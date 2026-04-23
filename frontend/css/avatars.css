@@ -190,15 +190,15 @@
   animation: avatarOrbitSpin 4.8s linear infinite;
 }
 
-/* colored orbit nodes */
+/* colored orbit nodes — centred exactly on the ring line */
 .avatar-orbit--outer::before {
   content: "";
   position: absolute;
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  top: 10%;
-  left: 8px;
+  top: -5px;
+  left: calc(50% - 5px);
   background: linear-gradient(135deg, #1776d2, #53b4ff);
   box-shadow: 0 0 6px rgba(23, 118, 210, 0.5);
 }
@@ -209,8 +209,8 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  bottom: 10%;
-  right: 6px;
+  top: -4px;
+  left: calc(50% - 4px);
   background: linear-gradient(135deg, #d59a1e, #ffd66b);
   box-shadow: 0 0 6px rgba(213, 154, 30, 0.5);
 }
@@ -221,8 +221,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  top: 6px;
-  right: 50%;
+  top: -3px;
+  left: calc(50% - 3px);
   background: linear-gradient(135deg, #129b67, #56d58d);
   box-shadow: 0 0 6px rgba(18, 155, 103, 0.5);
 }

@@ -2599,6 +2599,140 @@ body.high-contrast .loading-overlay__label {
   text-transform: uppercase;
 }
 
+.panel-kicker-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+}
+
+.badge-info-wrap {
+  position: relative;
+}
+
+.badge-info-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(23, 118, 210, 0.1);
+  border: 1.5px solid rgba(23, 118, 210, 0.3);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 800;
+  font-style: italic;
+  color: #0f5cad;
+  line-height: 1;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.badge-info-btn:hover {
+  background: rgba(23, 118, 210, 0.18);
+  border-color: rgba(23, 118, 210, 0.5);
+}
+
+.badge-info-tooltip {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 999;
+  width: 310px;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.18);
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-weight: 400 !important;
+  font-size: 0.82rem;
+  color: #526175 !important;
+}
+
+.badge-info-tooltip[hidden] {
+  display: none;
+}
+
+.badge-info-tooltip__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.badge-info-tooltip strong {
+  display: block;
+  color: #102033 !important;
+  font-size: 0.88rem;
+  font-style: normal;
+}
+
+.badge-info-close {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.07);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: #526175;
+  flex-shrink: 0;
+  transition: background 150ms ease;
+}
+
+.badge-info-close:hover {
+  background: rgba(15, 23, 42, 0.14);
+}
+
+.badge-info-tooltip p {
+  margin: 0 0 12px;
+  line-height: 1.55;
+  color: #526175 !important;
+  font-style: normal;
+}
+
+.badge-info-tooltip ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.badge-info-tooltip li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.45;
+  color: #526175 !important;
+  font-style: normal;
+}
+
+.badge-info-tooltip li span:last-child {
+  color: #526175 !important;
+}
+
+.badge-pill {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(23, 118, 210, 0.1);
+  color: #0f5cad !important;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase !important;
+  min-width: 68px;
+  text-align: center;
+  margin-top: 2px;
+}
+
 .menu-stat-row,
 .problem-stat-row,
 .brief-stats-grid,
@@ -2680,8 +2814,16 @@ body.high-contrast .loading-overlay__label {
   color: #526175;
 }
 
-.avatar-tag {
+.avatar-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.avatar-tag {
   padding: 6px 10px;
   border-radius: 999px;
   background: rgba(23, 118, 210, 0.1);
@@ -2690,6 +2832,68 @@ body.high-contrast .loading-overlay__label {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+.avatar-badge-info {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.65rem;
+  font-weight: 800;
+  font-style: italic;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: border-color 150ms ease, color 150ms ease;
+  flex-shrink: 0;
+}
+
+.avatar-badge-info:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+.badge-hover-tooltip {
+  display: none;
+  position: absolute;
+  z-index: 99999;
+  width: 220px;
+  padding: 12px 14px;
+  background: #1a2232;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  pointer-events: none;
+}
+
+.badge-hover-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.badge-hover-tooltip strong {
+  display: block;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.badge-hover-tooltip p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.8rem;
+  line-height: 1.5;
 }
 
 .avatar-grid--team {

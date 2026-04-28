@@ -276,7 +276,7 @@
 
     <h2>There Is No Single Right Answer</h2>
     <p>
-      Some teams will prioritize speed. Others will prioritize inclusion or careful budgeting. The important part is discussing the trade-offs and understanding what each decision says about your values.
+      Some teams will prioritise speed. Others will prioritise inclusion or careful budgeting. The important part is discussing the trade-offs and understanding what each decision says about your values.
     </p>
 
     <div class="highlight-box">
@@ -305,7 +305,7 @@
 
     <h2>Quick Reference</h2>
     <h3>Game Duration</h3>
-    <p><strong>20 to 30 minutes</strong> for a full run.</p>
+    <p><strong>5 to 15 minutes</strong> for a full run.</p>
 
     <h3>Team Size</h3>
     <p><strong>4 to 5 players</strong> works best, though one player can also play alone.</p>
@@ -348,7 +348,11 @@
   <script src="js/ui.js?v=20260316b"></script>
   <script>
     function goHome() {
-      window.TechTycoonUI?.navigate('index.html') || (window.location.href = 'index.html');
+      if (history.length > 1) {
+        history.back();
+      } else {
+        window.TechTycoonUI?.navigate('index.html') || (window.location.href = 'index.html');
+      }
     }
 
     function startPlaying() {

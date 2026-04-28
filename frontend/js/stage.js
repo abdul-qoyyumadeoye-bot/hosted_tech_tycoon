@@ -26,7 +26,7 @@ function generateChoiceDescription(choice) {
   if (choice.effects.impact) effects.push(`Impact ${choice.effects.impact > 0 ? '+' : ''}${choice.effects.impact}`);
   if (choice.effects.inclusivity) effects.push(`Inclusivity ${choice.effects.inclusivity > 0 ? '+' : ''}${choice.effects.inclusivity}`);
   if (choice.effects.trust) effects.push(`Trust ${choice.effects.trust > 0 ? '+' : ''}${choice.effects.trust}`);
-  if (choice.effects.budget) effects.push(`${choice.effects.budget > 0 ? 'Gain' : 'Spend'} $${Math.abs(choice.effects.budget).toLocaleString()}`);
+  if (choice.effects.budget) effects.push(`${choice.effects.budget > 0 ? 'Gain' : 'Spend'} £${Math.abs(choice.effects.budget).toLocaleString()}`);
   return effects.length ? effects.join(' · ') : 'A smart decision for this stage.';
 }
 
@@ -89,8 +89,8 @@ function renderStage() {
               const label = metric.charAt(0).toUpperCase() + metric.slice(1);
               const badgeClass = value > 0 ? 'positive' : (value < 0 ? 'negative' : 'neutral');
               const sign = value > 0 ? '+' : '';
-              const displayValue = metric === 'budget' ? `${sign}$${Math.abs(value).toLocaleString()}` : `${sign}${value}`;
-              return `<div class="impact-badge ${badgeClass}">${label}: ${value < 0 && metric === 'budget' ? '-$' + Math.abs(value).toLocaleString() : displayValue}</div>`;
+              const displayValue = metric === 'budget' ? `${sign}£${Math.abs(value).toLocaleString()}` : `${sign}${value}`;
+              return `<div class="impact-badge ${badgeClass}">${label}: ${value < 0 && metric === 'budget' ? '-£' + Math.abs(value).toLocaleString() : displayValue}</div>`;
             }).join('')}
           </div>
         </button>
@@ -240,7 +240,7 @@ function updateMetricsDisplay(previousScores = null, effects = null) {
     window.TechTycoonUI?.animateValue(el, metric.value, {
       duration: metric.currency ? 0 : (window.TechTycoonUI?.reducedMotion() ? 0 : 520),
       formatter: metric.currency
-        ? (value) => '$' + Math.round(value).toLocaleString()
+        ? (value) => '£' + Math.round(value).toLocaleString()
         : (value) => `${String(Math.round(value))} /100`,
       pulseClass: pulse
     });
@@ -248,7 +248,7 @@ function updateMetricsDisplay(previousScores = null, effects = null) {
 
   const baseEl = document.getElementById('budget-base');
   if (baseEl) {
-    baseEl.textContent = `of $${(gameState.data.initialBudget || 0).toLocaleString()}`;
+    baseEl.textContent = `of £${(gameState.data.initialBudget || 0).toLocaleString()}`;
   }
 }
 
@@ -274,7 +274,7 @@ function showChoiceFeedback(effects, tense, daysRemaining, button) {
 
   const type = tense ? 'danger' : daysRemaining <= 5 ? 'warning' : 'success';
   const title = tense ? 'Crisis response logged' : 'Decision locked in';
-  const message = `Day ${gameState.data.currentDay} complete. Budget remaining: ${window.TechTycoonUI?.formatCurrency(gameState.data.scores.budget) || ('$' + gameState.data.scores.budget.toLocaleString())}.`;
+  const message = `Day ${gameState.data.currentDay} complete. Budget remaining: ${window.TechTycoonUI?.formatCurrency(gameState.data.scores.budget) || ('£' + gameState.data.scores.budget.toLocaleString())}.`;
   window.TechTycoonUI?.showNotification({ title, message, type });
 }
 

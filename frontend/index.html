@@ -12,6 +12,7 @@
   <nav class="topnav">
     <div class="topnav-content">
       <h1>TechTycoon Simulator</h1>
+      <button class="htp-btn" onclick="window.TechTycoonUI?.navigate('how-to-play.html')||(window.location.href='how-to-play.html')" aria-label="How to play guide">How to Play</button>
       <button class="access-btn" id="accessibility-toggle" aria-label="Accessibility settings" aria-expanded="false">&#9855;</button>
     </div>
   </nav>
@@ -36,7 +37,7 @@
         <div class="menu-stat-row">
           <div class="menu-stat-card">
             <span>Run Length</span>
-            <strong>20-30 min</strong>
+            <strong>5-15 min</strong>
           </div>
           <div class="menu-stat-card">
             <span>Play Style</span>
@@ -49,6 +50,10 @@
         </div>
 
         <div class="welcome-description">
+          <div id="startup-fact" class="startup-fact">
+            <span class="startup-fact__label">UK Tech Startup Facts</span>
+            <ul class="startup-fact__list"></ul>
+          </div>
           <p>In TechTycoon, your team runs a startup under real pressure. Every stage costs time, money, and stakeholder confidence.</p>
           <p>You will balance four live metrics throughout the run:</p>
           <ul>

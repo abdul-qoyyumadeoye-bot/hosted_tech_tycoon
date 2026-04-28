@@ -1,0 +1,416 @@
+================================================================================
+  TECHTYCOON — SCENARIO MANAGEMENT GUIDE
+  Everything you need to add, edit, remove, and format scenarios correctly
+================================================================================
+
+All scenarios live in one file:
+  frontend/data/scenarios.json
+
+The file contains a single JSON object with a "problems" array. Each item in
+that array is one complete scenario. The game reads this file on load — no
+code changes are needed when you add or remove a scenario.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  1. FILE STRUCTURE AT A GLANCE
+────────────────────────────────────────────────────────────────────────────────
+
+{
+  "problems": [
+    { ...scenario 1... },
+    { ...scenario 2... },
+    { ...scenario 3... }
+  ]
+}
+
+Every scenario object contains:
+  - Top-level identity fields  (id, title, theme)
+  - Project brief              (projectBrief)
+  - Deadline and budget        (launchDeadline, totalDays, startingBudget)
+  - Suggested team             (suggestedTeam)
+  - Stages array               (stages)
+
+Each stage contains:
+  - Identity fields            (id, title, time, description)
+  - Choices array              (choices)
+
+Each choice contains:
+  - Choice text                (text)
+  - One-line brief             (brief)
+  - Effect values              (effects)
+
+
+────────────────────────────────────────────────────────────────────────────────
+  2. TOP-LEVEL SCENARIO FIELDS
+────────────────────────────────────────────────────────────────────────────────
+
+"id"  (string, required)
+  A short, unique, lowercase slug. No spaces — use hyphens.
+  Used internally to identify and save the run. Must be unique across all
+  scenarios or saved game data will clash.
+  Example:  "id": "healthtrack-app"
+
+"title"  (string, required)
+  The full display name shown on the problem-selection card and the brief page.
+  Keep it under 50 characters so it fits cleanly on the card.
+  Example:  "title": "HealthTrack Patient App"
+
+"theme"  (string, required)
+  A short category tag shown in uppercase on the selection card (e.g. "Online
+  safety", "Educational productivity"). Keep it under 30 characters.
+  Example:  "theme": "Healthcare technology"
+
+"projectBrief"  (string, required)
+  The full paragraph shown on the brief page before the player selects their
+  team. Should explain:
+    - What problem exists in the real world
+    - What the product aims to solve
+    - Who the users are
+    - What the launch goal is
+  Write in plain English. 3–5 sentences is the right length. Longer text will
+  still display, but risks overwhelming players before they start.
+  Example:
+    "projectBrief": "Many patients struggle to track their medication schedules
+    across multiple devices and apps. HealthTrack is a unified mobile platform
+    that sends smart reminders, logs doses, and alerts GPs when patients miss
+    critical medication. The goal is to launch before a national health
+    conference where NHS trusts will evaluate digital tools."
+
+"launchDeadline"  (string, required)
+  A human-readable deadline shown in the deadline strip during play.
+  This is display-only — it does not affect game logic.
+  Example:  "launchDeadline": "November 30"
+
+"totalDays"  (number, required)
+  The total number of in-game days available before time runs out.
+  The sum of all stage "time" values should ideally be equal to or slightly
+  less than totalDays so that players can complete the game without running
+  out of time on a default path. If the sum of stages exceeds totalDays,
+  players will hit the deadline before finishing — this can be intentional for
+  a harder scenario.
+  Typical range: 30–60
+  Example:  "totalDays": 45
+
+"startingBudget"  (number, required)
+  The budget players begin with, in pounds/dollars (no symbol needed).
+  All budget effects in choices are subtracted or added to this value.
+  Make sure the sum of the cheapest choices across all stages does not exceed
+  this number, or players will run out of budget before finishing.
+  Typical range: 80000–200000
+  Example:  "startingBudget": 130000
+
+"suggestedTeam"  (array of strings, required)
+  Exactly 5 role names from the available roster. These appear as pills on
+  the brief page and as a hint on the team-selection page.
+  Each name must match a role exactly as it appears in the team roster
+  (see the select-team page for the full list of valid roles).
+  Example:
+    "suggestedTeam": [
+      "Product Manager",
+      "Software Engineer",
+      "UX Designer",
+      "Data Scientist",
+      "Marketing Manager"
+    ]
+
+  Rules:
+    - Always provide exactly 5 names
+    - Pick roles that genuinely map to the stages in your scenario
+    - Aim for a spread across badge categories (Build, Ops, Risk, Experience,
+      Insights, Growth) so players learn about balanced teams
+
+
+────────────────────────────────────────────────────────────────────────────────
+  3. STAGES
+────────────────────────────────────────────────────────────────────────────────
+
+Each scenario must have a "stages" array. The game plays through stages in
+order — players cannot skip or reorder them. Aim for 6–8 stages per scenario.
+Fewer than 5 feels too short; more than 10 becomes repetitive.
+
+Each stage object:
+
+  "id"  (string, required)
+    Unique slug within this scenario. Used to save which choice was made.
+    No spaces — use hyphens.
+    Example:  "id": "beta-testing"
+
+  "title"  (string, required)
+    Displayed as the stage heading. Always follow the format:
+      "Stage N: Descriptive Title"
+    For crisis or unexpected-event stages, use:
+      "Stage N: Unexpected Issue: What Happened"
+    Example:  "title": "Stage 3: Beta Testing"
+    Example:  "title": "Stage 5: Crisis: Data Breach Discovered"
+
+  "time"  (number, required)
+    How many in-game days this stage consumes. Deducted from the countdown
+    when the player confirms their choice.
+    Typical range: 2–10
+    Shorter values (2–3) suit crisis/reactive stages.
+    Longer values (7–10) suit major development stages.
+    Example:  "time": 5
+
+  "description"  (string, required)
+    A single sentence shown below the stage title. It sets the scene and
+    frames the decision the player must make. Do not explain the choices here —
+    that is what each choice's "brief" is for.
+    Example:  "description": "The first build is ready and you must decide how
+    to test it with real users."
+
+
+────────────────────────────────────────────────────────────────────────────────
+  4. CHOICES
+────────────────────────────────────────────────────────────────────────────────
+
+Each stage must have a "choices" array with exactly 2 options. The game always
+displays exactly 2 choices side by side. More or fewer will break the layout.
+
+Each choice object:
+
+  "text"  (string, required)
+    The action label — the bold heading on the choice card. Keep it short and
+    active. Under 60 characters is ideal.
+    Example:  "text": "Run a public beta with 500 users"
+
+  "brief"  (string, required)
+    1–2 sentences explaining what this choice actually means in practice and
+    what trade-off it involves. This appears between the title and the stats on
+    the choice card. Write it from the player's perspective.
+    Example:  "brief": "Open the app to a large group of real users to surface
+    bugs quickly, at the cost of exposing an unpolished experience to people
+    who may form a lasting first impression."
+
+  "effects"  (object, required)
+    The numerical impact of this choice on the four game metrics. All four
+    keys must always be present, even if the value is 0.
+
+    Keys:
+      "impact"      — does the product solve the real problem? (integer)
+      "inclusivity" — does it work for everyone? (integer)
+      "trust"       — do users and stakeholders believe in it? (integer)
+      "budget"      — money gained or spent (negative = spend, positive = gain)
+
+    Positive values increase the metric. Negative values decrease it.
+    Budget values should be negative for spending (e.g. -12000) and positive
+    only if a choice somehow earns money.
+
+    Guidelines for balance:
+      - For a "good" choice, one or two metrics gain significantly (+8 to +18),
+        others gain slightly or stay at 0, and the budget cost is higher.
+      - For a "fast/cheap" choice, gains are smaller (+2 to +8), budget cost is
+        lower, and one metric may take a small hit (e.g. -3 inclusivity).
+      - At least one choice per scenario should have a negative impact on a
+        metric to show that not all decisions are purely positive.
+      - Avoid making one choice obviously better in every metric — the trade-off
+        is the point.
+
+    Example:
+      "effects": {
+        "impact": 10,
+        "inclusivity": 5,
+        "trust": 7,
+        "budget": -18000
+      }
+
+
+────────────────────────────────────────────────────────────────────────────────
+  5. STAGE SEQUENCING GUIDELINES
+────────────────────────────────────────────────────────────────────────────────
+
+A well-structured scenario follows a natural project lifecycle. Use this as a
+starting template and adapt it to your context:
+
+  Stage 1  — Research / Discovery
+             Validate the idea, understand users, scope the problem.
+             Time: 3–5 days. Budget cost: low.
+
+  Stage 2  — Core Build
+             The main technical or design work that defines the product.
+             Time: 7–10 days. Budget cost: high.
+
+  Stage 3  — User Experience / Design
+             Accessibility, usability testing, interface decisions.
+             Time: 5–7 days. Budget cost: medium.
+
+  Stage 4  — Unexpected Crisis
+             A problem surfaces mid-project. Force a reactive decision.
+             Title must include "Unexpected Issue:" or "Crisis:".
+             Time: 2–4 days. Budget cost: medium–high.
+
+  Stage 5  — Security / Compliance / Risk
+             Data handling, legal concerns, privacy review.
+             Time: 3–5 days. Budget cost: medium.
+
+  Stage 6  — Launch Preparation / Marketing / Partnerships
+             How to get the product in front of the right people.
+             Time: 5–8 days. Budget cost: medium.
+
+  Stage 7  — Final Launch Decision
+             Ship now or delay. This is the closing tension.
+             Time: 2–3 days. Budget cost: low.
+
+Crisis stages work best in the middle of the run (stages 3–5), after the
+player has invested effort but before the final push. Placing a crisis too
+early feels punishing; too late feels rushed.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  6. ADDING A NEW SCENARIO
+────────────────────────────────────────────────────────────────────────────────
+
+Step 1 — Open  frontend/data/scenarios.json
+
+Step 2 — Add a comma after the closing } of the last scenario in the "problems"
+          array, then paste your new scenario object.
+
+Step 3 — Validate the JSON. Common mistakes:
+          - Missing comma between scenarios
+          - Trailing comma after the last item in an array
+          - Unmatched { } or [ ] brackets
+          - Straight quotes instead of double quotes
+          Use a JSON validator (jsonlint.com or your editor's built-in linter)
+          before testing in the browser.
+
+Step 4 — Reload the game. Your scenario will appear automatically on the
+          problem-selection screen. No code changes needed.
+
+Template — copy, fill in, and paste into the "problems" array:
+
+{
+  "id": "your-scenario-id",
+  "title": "Your Scenario Title",
+  "theme": "Your theme",
+  "projectBrief": "Describe the real-world problem, what the product solves, who uses it, and what the launch goal is.",
+  "launchDeadline": "Month Day",
+  "totalDays": 45,
+  "startingBudget": 120000,
+  "suggestedTeam": [
+    "Role Name 1",
+    "Role Name 2",
+    "Role Name 3",
+    "Role Name 4",
+    "Role Name 5"
+  ],
+  "stages": [
+    {
+      "id": "stage-one-id",
+      "title": "Stage 1: Stage Title",
+      "time": 4,
+      "description": "One sentence framing the decision.",
+      "choices": [
+        {
+          "text": "Thorough option label",
+          "brief": "What this choice means in practice and what it trades off.",
+          "effects": { "impact": 8, "inclusivity": 6, "trust": 5, "budget": -8000 }
+        },
+        {
+          "text": "Fast or cheap option label",
+          "brief": "What this choice means in practice and what it trades off.",
+          "effects": { "impact": 3, "inclusivity": -2, "trust": -3, "budget": -2000 }
+        }
+      ]
+    }
+  ]
+}
+
+
+────────────────────────────────────────────────────────────────────────────────
+  7. REMOVING A SCENARIO
+────────────────────────────────────────────────────────────────────────────────
+
+Step 1 — Open  frontend/data/scenarios.json
+
+Step 2 — Find the scenario object by its "id" field.
+
+Step 3 — Delete the entire object from the opening { to its closing },
+          including the trailing comma if it is not the last item, or the
+          preceding comma if it is.
+
+Step 4 — Validate the JSON and reload. The scenario will no longer appear
+          on the selection screen.
+
+Important: If any saved game sessions reference the removed scenario's id,
+those sessions will fail to load gracefully. The game handles this by
+redirecting the player back to the start, so no data corruption occurs —
+but players will lose their run progress for that scenario.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  8. EDITING AN EXISTING SCENARIO
+────────────────────────────────────────────────────────────────────────────────
+
+You can safely edit any string or number field at any time. Changes take
+effect on the next page load.
+
+Caution — changing the "id" of a scenario or the "id" of a stage will
+invalidate any saved runs that used the old id. Only change ids when you
+are certain no active sessions reference them, or when you intentionally
+want to reset progress.
+
+To change the number of stages: add or remove stage objects from the "stages"
+array. Validate the JSON and update totalDays if needed to keep the pacing
+correct.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  9. HOW EACH FIELD MAPS TO THE UI
+────────────────────────────────────────────────────────────────────────────────
+
+PROBLEM SELECTION SCREEN
+  Card title         ← scenario "title"
+  Theme tag          ← scenario "theme"
+  Budget chip        ← scenario "startingBudget" (formatted as currency)
+  Days chip          ← scenario "totalDays"
+  Deadline chip      ← scenario "launchDeadline"
+
+BRIEF PAGE
+  Heading            ← scenario "title"
+  Body paragraph     ← scenario "projectBrief"
+  Suggested team     ← scenario "suggestedTeam" (shown as pills)
+
+TEAM SELECTION PAGE
+  Suggested team hint← scenario "suggestedTeam"
+
+STAGE PAGE — HEADER
+  "Stage N of N"     ← stage index + total stage count
+  Stage heading      ← stage "title"
+  Scene setter       ← stage "description"
+  Days cost line     ← stage "time"
+
+STAGE PAGE — CHOICE CARDS
+  Bold heading       ← choice "text"
+  Explanation        ← choice "brief"
+  Impact badge       ← choice effects "impact"
+  Inclusivity badge  ← choice effects "inclusivity"
+  Trust badge        ← choice effects "trust"
+  Budget badge       ← choice effects "budget" (shown as currency)
+
+DEADLINE STRIP (top of stage page)
+  Launch deadline    ← scenario "launchDeadline"
+  Current day        ← calculated from choices made so far
+  Days remaining     ← scenario "totalDays" minus current day
+
+RESULTS PAGE
+  Final scores       ← cumulative effects from all chosen choices
+  Reflection prompts ← generated automatically based on final metric values
+
+
+────────────────────────────────────────────────────────────────────────────────
+  10. QUICK RULES CHECKLIST BEFORE PUBLISHING A SCENARIO
+────────────────────────────────────────────────────────────────────────────────
+
+  [ ] "id" is unique, lowercase, no spaces
+  [ ] "suggestedTeam" has exactly 5 role names from the valid roster
+  [ ] "stages" has between 6 and 8 entries
+  [ ] Every stage has exactly 2 choices
+  [ ] Every choice has "text", "brief", and "effects" with all four keys
+  [ ] Budget effects are negative for spending (e.g. -15000 not 15000)
+  [ ] Sum of all stage "time" values is close to but does not exceed "totalDays"
+  [ ] Sum of cheapest choices' budget costs does not exceed "startingBudget"
+  [ ] At least one stage is a crisis or unexpected-issue stage
+  [ ] Each choice has a genuine trade-off — one metric gains, another may drop
+  [ ] JSON is valid (no trailing commas, mismatched brackets, or wrong quotes)
+  [ ] Tested in the browser from start to finish
+
+================================================================================

@@ -360,7 +360,7 @@ class StageGenerator {
         description: 'Your company is profitable. Investors want returns. Do you prioritise profits or invest in sustainability and social good?',
         choices: [
           {
-            text: 'Maximize profits – bare minimum on sustainability (£0)',
+            text: 'Maximise profits – bare minimum on sustainability (£0)',
             effects: { impact: 14, inclusivity: 5, trust: 6, budget: 5000 }
           },
           {

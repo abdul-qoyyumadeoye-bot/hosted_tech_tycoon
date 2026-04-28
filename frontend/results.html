@@ -14,6 +14,7 @@
       <div class="progress-bar-container">
         <div class="progress-bar" style="width: 100%;"></div>
       </div>
+      <button class="htp-btn" onclick="window.TechTycoonUI?.navigate('how-to-play.html')||(window.location.href='how-to-play.html')" aria-label="How to play guide">How to Play</button>
       <button class="access-btn" id="accessibility-toggle" aria-label="Accessibility settings" aria-expanded="false">&#9855;</button>
     </div>
   </nav>
@@ -50,9 +51,14 @@
         </div>
         <div class="score-card">
           <div class="score-label">Budget Remaining</div>
-          <div class="score-value budget" id="final-budget">$0</div>
+          <div class="score-value budget" id="final-budget">£0</div>
           <div class="score-subtext" id="final-budget-base"></div>
         </div>
+      </div>
+
+      <div id="skills-fact" class="skills-fact results-block">
+        <span class="skills-fact__label">Skills Tech Employers Look For</span>
+        <ul class="skills-fact__list"></ul>
       </div>
 
       <div class="reflection-section results-block">
@@ -63,6 +69,11 @@
       <div id="summary-section" class="results-block" style="margin: 24px 0; padding: 16px; background: #f0f9ff; border-radius: 8px;">
         <h3 style="margin-top: 0;">Your Decisions</h3>
         <div id="decisions-summary"></div>
+      </div>
+
+      <div id="owner-skills" class="owner-skills results-block">
+        <span class="owner-skills__label">Skills a Tech Startup Owner Must Have</span>
+        <ul class="owner-skills__list"></ul>
       </div>
 
       <div class="button-group">

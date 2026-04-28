@@ -31,7 +31,7 @@ function renderBrief() {
         </div>
         <div class="brief-stat-card">
           <span>Starting budget</span>
-          <strong>$${(problem.startingBudget || 0).toLocaleString()}</strong>
+          <strong>£${(problem.startingBudget || 0).toLocaleString()}</strong>
           <small>Available runway for the full sprint</small>
         </div>
         <div class="brief-stat-card">

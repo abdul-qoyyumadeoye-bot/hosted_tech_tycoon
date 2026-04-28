@@ -83,7 +83,7 @@
 
   function formatCurrency(value) {
     const abs = Math.abs(Math.round(value));
-    const text = "$" + abs.toLocaleString();
+    const text = "£" + abs.toLocaleString();
     if (value < 0) return "-" + text;
     if (value > 0) return "+" + text;
     return text;
@@ -322,7 +322,7 @@
           const value = effects[metric];
           if (value === undefined || value === 0) return null;
           if (metric === 'budget') {
-            return `${value > 0 ? '+' : ''}$${value.toLocaleString()}`;
+            return `${value > 0 ? '+' : ''}£${value.toLocaleString()}`;
           }
           return `${metric.charAt(0).toUpperCase() + metric.slice(1)} ${value > 0 ? '+' : ''}${value}`;
         }).filter(Boolean).join(' · ')

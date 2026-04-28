@@ -39,7 +39,7 @@ function renderProblems() {
       </div>
       <div class="problem-stat-row">
         <div class="problem-stat-chip"><span>Deadline</span><strong>Day ${problem.totalDays}</strong></div>
-        <div class="problem-stat-chip"><span>Budget</span><strong>$${(problem.startingBudget || 0).toLocaleString()}</strong></div>
+        <div class="problem-stat-chip"><span>Budget</span><strong>£${(problem.startingBudget || 0).toLocaleString()}</strong></div>
         <div class="problem-stat-chip"><span>Stages</span><strong>${problem.stages?.length || 0}</strong></div>
       </div>
       <p class="problem-subinfo"><strong>Launch:</strong> ${problem.launchDeadline || 'TBC'}</p>
@@ -85,7 +85,7 @@ function selectProblem() {
     gameState.save();
     window.TechTycoonUI?.showNotification({
       title: 'Scenario locked',
-      message: `${problem.title} selected. Budget: $${(problem.startingBudget || 0).toLocaleString()}.`,
+      message: `${problem.title} selected. Budget: £${(problem.startingBudget || 0).toLocaleString()}.`,
       type: 'info'
     });
   }

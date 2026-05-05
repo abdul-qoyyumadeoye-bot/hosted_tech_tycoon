@@ -1,0 +1,224 @@
+================================================================================
+  TECHTYCOON — STYLING GUIDE
+  Everything you need to change colours, fonts, layout, and visual appearance
+================================================================================
+
+All visual styling for the active game lives in two files:
+  frontend/css/base.css     — colours, fonts, layout, all page styles
+  frontend/css/avatars.css  — team member and role card visuals only
+
+Do NOT edit the root-level  style.css  — that belongs to an old unused version
+of the game and has no effect on the current one.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  1. HOW TO FIND WHAT TO CHANGE
+────────────────────────────────────────────────────────────────────────────────
+
+The easiest way to find which CSS rule controls something on screen:
+
+Step 1 — Open the game in Chrome, Firefox, or Edge.
+Step 2 — Press F12 to open developer tools.
+Step 3 — Click the cursor icon (top-left of the dev tools panel) or press
+          Ctrl+Shift+C (Cmd+Shift+C on Mac).
+Step 4 — Click the element on the page you want to style.
+Step 5 — The right panel shows the CSS rules that apply to it, including
+          which file and line number each rule comes from.
+Step 6 — Open that file, go to that line, and make your change.
+
+Changes to CSS files take effect immediately after saving and refreshing
+the browser. No build step is needed.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  2. COLOURS
+────────────────────────────────────────────────────────────────────────────────
+
+The game uses CSS variables (also called custom properties) for its main
+colours. They are defined near the top of  frontend/css/base.css  in a
+section that looks like this:
+
+  :root {
+    --color-primary:    #1a1a2e;
+    --color-accent:     #4f8ef7;
+    --color-surface:    #16213e;
+    ...
+  }
+
+To change a colour used across the whole game, edit the value here.
+The change will apply everywhere that variable is used.
+
+Common variables and what they control:
+
+  --color-primary     Background colour of most panels and the page body
+  --color-accent      The main interactive colour — buttons, highlights, links
+  --color-surface     Slightly lighter background used for cards and panels
+  --color-text        The main body text colour
+  --color-muted       Secondary text — descriptions, labels, captions
+
+Colours are written in hex format (e.g. #4f8ef7) or as rgb() values.
+To find a colour's hex code, use any colour picker tool or browser extension.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  3. FONTS AND TEXT SIZE
+────────────────────────────────────────────────────────────────────────────────
+
+The font is set near the top of  base.css  on the  body  rule:
+
+  body {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    font-size: 16px;
+    ...
+  }
+
+To change the base font size for the whole game, change the  font-size  value
+on the  body  rule. All other text sizes in the game are defined relative to
+this value, so increasing it here makes everything proportionally larger.
+
+To change a specific heading or element size, find its CSS rule in base.css
+(use F12 to locate it — see Section 1) and change its  font-size  value.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  4. BUTTONS
+────────────────────────────────────────────────────────────────────────────────
+
+There are three button styles used in the game:
+
+  .btn-primary    — the main action button (e.g. "Lock Role", "Begin Run")
+  .btn-secondary  — the back/cancel button
+  .btn-large      — a size modifier applied on top of primary or secondary
+
+These are defined in  base.css. To change button colour, border radius,
+or text — find the  .btn-primary  or  .btn-secondary  rule and edit it.
+
+  Important: Make changes using targeted rules only. Do not remove a class
+  from the HTML to change its appearance — other styles may depend on it.
+  Instead, add a new rule below the existing one to override just the
+  property you want to change.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  5. ROLE AND TEAM MEMBER CARDS
+────────────────────────────────────────────────────────────────────────────────
+
+Role cards (on the role selection screen) and team member cards (on the team
+selection screen) share the  .avatar-card  class, styled in  avatars.css.
+
+Key classes in  avatars.css:
+
+  .avatar-card          — the whole card (background, border, size, hover)
+  .avatar-card.selected — the card when it is chosen (highlight colour)
+  .avatar-icon          — the circle or emoji container at the top of the card
+  .avatar-name          — the name text below the icon
+  .avatar-description   — the small descriptive text at the bottom
+
+Team cards also have animated orbit rings — these are controlled by:
+  .avatar-orbit--outer
+  .avatar-orbit--mid
+  .avatar-orbit--inner
+
+To turn off the orbit animation, add  display: none  to these three classes
+in  avatars.css. To change animation speed, find the  animation  property on
+those classes and change the duration value (e.g. 4s, 6s).
+
+The colour palette of each team card is generated automatically from the
+member's name. This cannot be changed per-card without editing the JavaScript
+in  frontend/js/select-team.js.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  6. THE TOP NAVIGATION BAR
+────────────────────────────────────────────────────────────────────────────────
+
+The nav bar appears on every page. It contains the game title, a progress bar,
+and the accessibility button. Its style is in  base.css:
+
+  .topnav           — the outer bar (background colour, height)
+  .topnav-content   — the inner container (padding, alignment)
+  .progress-bar-container  — the grey track behind the progress bar
+  .progress-bar     — the coloured fill that grows as the player advances
+
+To change the nav bar colour, find the  .topnav  rule and edit
+its  background  property.
+
+To change the progress bar colour, find the  .progress-bar  rule and
+edit its  background  or  background-color  property.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  7. THE DECISION STAGE SCREEN
+────────────────────────────────────────────────────────────────────────────────
+
+The stage page has two main areas: the stage header and the two choice cards.
+
+  .stage-header         — the area containing the stage title and description
+  .stage-header--tense  — applied automatically on crisis stages (darker tone)
+  .choices-grid         — the two-column layout holding the choice cards
+  .choice-card          — an individual choice button
+  .choice-card.selected — the card after the player picks it
+
+  The metric badges on choice cards (Impact, Inclusivity, Trust, Budget):
+  .metric-badge         — the pill showing each metric value
+  .metric-badge--positive  — green colouring for positive values
+  .metric-badge--negative  — red colouring for negative values
+
+The deadline strip at the top of the stage (showing days remaining):
+  .deadline-strip  — the banner across the top with countdown information
+
+
+────────────────────────────────────────────────────────────────────────────────
+  8. THE RESULTS PAGE
+────────────────────────────────────────────────────────────────────────────────
+
+The results page uses animated panels that reveal as the player scrolls.
+These panels use the class  .results-block  for both the reveal animation
+and the high-contrast styling.
+
+  Important: Do not remove  .results-block  from any element — it controls
+  the reveal animation as well as the appearance. If you want to change the
+  look of a results panel, add a targeted rule that overrides only the
+  specific property you want to change.
+
+Key classes on the results page:
+  .results-block        — each panel section
+  .score-grid           — the four metric scores displayed in a row
+  .score-card           — an individual metric score panel
+  .reflection-list      — the section showing the reflection questions
+  .fact-panel           — the rotating facts displayed at the bottom
+
+
+────────────────────────────────────────────────────────────────────────────────
+  9. MAKING A CHANGE SAFELY
+────────────────────────────────────────────────────────────────────────────────
+
+Before changing any CSS:
+
+  1. Use F12 to identify the exact class and property you want to change
+     (see Section 1)
+  2. Make the change in the correct file (base.css for general styles,
+     avatars.css for card visuals)
+  3. Save and refresh the browser to check the result
+  4. Check that the change has not broken anything on other pages — a rule
+     that affects a shared class will apply everywhere that class is used
+
+  If a change looks wrong or breaks something:
+  - Press Ctrl+Z (Cmd+Z) in your text editor to undo the change
+  - Or find the line you changed and revert the value manually
+  - Use F12 → Console to see if there are any errors
+
+
+────────────────────────────────────────────────────────────────────────────────
+  10. WHAT NOT TO CHANGE
+────────────────────────────────────────────────────────────────────────────────
+
+  - Do not edit  style.css  in the root folder — it is unused legacy code
+  - Do not remove class names from HTML elements to fix styling — add a
+    targeted CSS override instead (see Section 4)
+  - Do not delete the  .accessibility-panel  or its rules — these control
+    the accessibility features that must always be present
+  - Do not change  display: none  to  display: block  on the accessibility
+    panel directly — its visibility is managed by the JavaScript
+
+================================================================================

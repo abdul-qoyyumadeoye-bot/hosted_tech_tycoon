@@ -1,0 +1,202 @@
+================================================================================
+  TECHTYCOON — FACTS AND CONTENT GUIDE
+  Everything you need to add, edit, and remove the facts shown across the game
+================================================================================
+
+The game shows rotating facts on two screens. Each set of facts lives in a
+different JavaScript file as a plain list of text. No code knowledge is needed
+to edit them — just find the list and change the text.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  1. WHERE THE FACTS APPEAR
+────────────────────────────────────────────────────────────────────────────────
+
+There are three separate fact lists used across the game:
+
+  A. UK STARTUP FACTS
+     Shown on the welcome / landing page as rotating trivia.
+     File: frontend/js/index.js
+     List name: UK_STARTUP_FACTS
+     Current count: ~75 facts
+
+  B. TECH SKILLS FACTS
+     Shown on the results page — one random fact per session.
+     File: frontend/js/results.js
+     List name: TECH_SKILLS_FACTS
+     Current count: ~90 facts
+     Topic: skills and qualities valued in tech careers
+
+  C. STARTUP OWNER SKILLS
+     Also shown on the results page — one random fact per session.
+     File: frontend/js/results.js
+     List name: STARTUP_OWNER_SKILLS
+     Current count: ~100 facts
+     Topic: skills and qualities specific to founding a startup
+
+The results page picks one fact from list B and one from list C and displays
+them together at the end of each run.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  2. HOW THE LISTS ARE STRUCTURED
+────────────────────────────────────────────────────────────────────────────────
+
+Each list looks like this in the file:
+
+  const UK_STARTUP_FACTS = [
+    "The UK has more tech unicorns than any other country in Europe.",
+    "London is ranked the third-largest tech hub in the world.",
+    "DeepMind, now part of Google, was founded in London in 2010.",
+    ...
+  ];
+
+Each fact is:
+  - On its own line
+  - Wrapped in double quotes
+  - Followed by a comma (except the very last item)
+
+The list starts with  [  and ends with  ];
+
+
+────────────────────────────────────────────────────────────────────────────────
+  3. ADDING A NEW FACT
+────────────────────────────────────────────────────────────────────────────────
+
+Step 1 — Open the relevant file in a text editor.
+
+Step 2 — Find the list you want to add to (see Section 1 for which file and
+          list name to look for).
+
+Step 3 — Add a new line at the end of the list, just before the closing  ];
+          The line must be a fact in double quotes, followed by a comma.
+
+          Example — adding a fact to UK_STARTUP_FACTS:
+
+            "Funding Circle, a UK peer-to-peer lending startup, has lent over
+            £15 billion to small businesses.",
+            "Your new fact goes here."
+          ];
+
+          (The previous last item gains a comma; your new item also has a
+          comma. Only the very last item in the list must have no comma.)
+
+Step 4 — Save the file and reload the browser. The new fact enters the
+          rotation immediately.
+
+  Tip: If you want a fact to appear only on the welcome page, add it to
+  UK_STARTUP_FACTS. If you want it on the results page, add it to
+  TECH_SKILLS_FACTS or STARTUP_OWNER_SKILLS depending on the topic.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  4. EDITING AN EXISTING FACT
+────────────────────────────────────────────────────────────────────────────────
+
+Step 1 — Open the relevant file in a text editor.
+
+Step 2 — Find the fact by scrolling through the list or using your text
+          editor's search function (Ctrl+F or Cmd+F). Search for a few words
+          from the fact you want to change.
+
+Step 3 — Edit the text directly. Keep it within the double quotes.
+
+Step 4 — Save and reload. The updated fact enters the rotation.
+
+  Important: Do not remove the double quotes or the comma at the end of the
+  line. If you accidentally delete a comma, the game may display a blank
+  page instead of loading correctly. See Section 7 for how to fix this.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  5. REMOVING A FACT
+────────────────────────────────────────────────────────────────────────────────
+
+Step 1 — Find the fact in the list (see Section 4, Step 2).
+
+Step 2 — Delete the entire line, including its comma.
+
+Step 3 — Check that the new last item in the list (if you deleted the old
+          last item) does NOT have a trailing comma.
+
+Step 4 — Save and reload.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  6. WRITING GOOD FACTS
+────────────────────────────────────────────────────────────────────────────────
+
+WELCOME PAGE FACTS (UK_STARTUP_FACTS)
+  - Should be about real UK tech companies, funding rounds, or the sector
+  - Include a company name, a number or statistic, and a brief context
+  - Write in plain English — avoid jargon
+  - One or two sentences maximum
+  - Use £ for British currency, not $
+
+  Strong examples:
+    "Raspberry Pi, designed in Cambridge, has sold over 50 million units and
+    is used in schools across more than 70 countries."
+
+    "Manchester is home to over 60,000 digital and tech workers — the
+    largest tech hub outside London."
+
+  Weak examples:
+    "Tech is important in the UK."  (too vague, no detail)
+    "Google acquired DeepMind."  (incomplete — missing context and figures)
+
+RESULTS PAGE FACTS (TECH_SKILLS_FACTS and STARTUP_OWNER_SKILLS)
+  - Should name one specific skill and explain why it matters in practice
+  - Begin with the skill name, followed by a colon
+  - Write from the perspective of someone building their career or startup
+  - Keep it specific — avoid generic advice
+  - One or two sentences maximum
+
+  Strong examples:
+    "Documentation: writing clear, concise technical documentation saves teams
+    hours of confusion — and is consistently cited by engineering managers as
+    underrated and undervalued."
+
+    "Customer obsession: the single most reliable predictor of startup success
+    is how often the founder speaks directly to customers."
+
+  Weak examples:
+    "Communication is important."  (too short, no context)
+    "You should always test your code."  (generic, not career-specific)
+
+
+────────────────────────────────────────────────────────────────────────────────
+  7. FIXING A BROKEN PAGE AFTER EDITING
+────────────────────────────────────────────────────────────────────────────────
+
+If the page goes blank or shows an error after editing a facts list, the most
+common cause is a punctuation mistake in the list. Check for:
+
+  - A missing comma between two facts
+  - A trailing comma after the very last fact (before  ];  )
+  - A fact that contains a double quote character inside it
+    (if you need a quote mark inside a fact, use a single quote instead,
+    or replace it with an apostrophe or remove it)
+  - A missing closing  "  at the end of a line
+
+To diagnose quickly:
+  1. Press F12 in the browser to open developer tools
+  2. Click the Console tab
+  3. Read the red error message — it will name the file and the line number
+     where the problem is
+  4. Open that file, go to that line, and fix the punctuation
+  5. Save and reload
+
+
+────────────────────────────────────────────────────────────────────────────────
+  8. QUICK CHECKLIST BEFORE ADDING OR EDITING FACTS
+────────────────────────────────────────────────────────────────────────────────
+
+  [ ] Each fact is on its own line, in double quotes, followed by a comma
+  [ ] The very last item in the list has no comma after it
+  [ ] No double quote characters appear inside the fact text
+  [ ] UK currency uses £, not $
+  [ ] Welcome-page facts are specific — they name a company or include a stat
+  [ ] Results-page facts begin with a skill name followed by a colon
+  [ ] The page has been reloaded and tested in the browser after the change
+
+================================================================================

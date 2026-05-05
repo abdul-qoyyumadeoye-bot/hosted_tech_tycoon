@@ -1,0 +1,268 @@
+================================================================================
+  TECHTYCOON — TEAM MEMBER GUIDE
+  Everything you need to add, edit, remove, and organise team specialists
+================================================================================
+
+Team members are defined in one file:
+  frontend/js/select-team.js
+
+Unlike roles, team members are managed as a plain list of names inside the
+code — no HTML editing needed. Adding a name to the list is all it takes to
+make a new team member appear in the game.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  1. WHAT A TEAM MEMBER IS
+────────────────────────────────────────────────────────────────────────────────
+
+A team member is a specialist the player picks before the game begins. Players
+must select 4 or 5 members from the full roster. The combination they choose
+is shown on the results page and forms part of the session record.
+
+Each team member card shows four things automatically:
+
+  ICON        — an emoji that matches the role (assigned automatically)
+  BADGE       — a category label (Build, Ops, Risk, Experience, Insights,
+                Growth) assigned automatically based on keywords in the name
+  NAME        — the role title as written in the list
+  DESCRIPTION — a one-line summary assigned automatically based on the name
+
+The icon, badge, and description are all generated from the name alone. You
+do not need to set them manually — just add the name to the list.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  2. THE SIX BADGE CATEGORIES
+────────────────────────────────────────────────────────────────────────────────
+
+Every team member is automatically sorted into one of six categories:
+
+  BUILD       — people who write code and ship the product
+                Keywords that trigger this badge: (anything not matched below)
+                Examples: Software Engineer, Frontend Developer, Game Developer
+
+  OPS         — people who keep delivery on track and funded
+                Keywords: finance, operations, project, product
+                Examples: Product Manager, Finance Manager, Operations Manager
+
+  RISK        — people who protect the product and its users
+                Keywords: security, privacy, compliance
+                Examples: Cybersecurity Specialist, Privacy Engineer,
+                          Compliance Officer
+
+  EXPERIENCE  — people who make the product easy and accessible
+                Keywords: design, ux, research, accessibility
+                Examples: UX Designer, User Researcher, Accessibility Specialist
+
+  INSIGHTS    — people who turn data and AI into decisions
+                Keywords: data, ai, machine
+                Examples: Data Scientist, AI Engineer, Machine Learning Engineer
+
+  GROWTH      — people who build audience and trust
+                Keywords: market, sales, brand, growth, community
+                Examples: Marketing Manager, Social Media Manager, Brand Manager
+
+When you add a new name, the badge is assigned automatically based on whether
+the name contains any of these keywords. If it matches none, it defaults to
+the Build badge.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  3. WHERE THE LIST LIVES
+────────────────────────────────────────────────────────────────────────────────
+
+Open  frontend/js/select-team.js
+
+Near the top of the file (around line 5) you will find:
+
+  const TEAM_ROLES = [
+    'Software Engineer',
+    'Frontend Developer',
+    'Backend Developer',
+    ...
+    'Ethics Advisor'
+  ];
+
+This is the complete roster. Each line is one team member name in single
+quotes, separated by commas. The last item has no comma after it.
+
+The full current list of 46 roles:
+
+  Software Engineer           Frontend Developer
+  Backend Developer           Full Stack Developer
+  Mobile App Developer        Game Developer
+  AI Engineer                 Machine Learning Engineer
+  Data Scientist              Data Analyst
+  DevOps Engineer             Cloud Engineer
+  Site Reliability Engineer   QA Tester
+  Automation Test Engineer    Cybersecurity Specialist
+  Security Engineer           Privacy Engineer
+  Product Manager             Project Manager
+  Technical Program Manager   UX Designer
+  UI Designer                 Accessibility Specialist
+  Interaction Designer        User Researcher
+  Marketing Manager           Digital Marketing Specialist
+  Growth Strategist           SEO Specialist
+  Social Media Manager        Brand Manager
+  Sales Manager               Partnerships Manager
+  Business Development Manager  Finance Manager
+  Operations Manager          Customer Support Lead
+  Community Manager           Content Creator
+  Technical Writer            Solutions Architect
+  Database Administrator      Infrastructure Engineer
+  Compliance Officer          Ethics Advisor
+
+
+────────────────────────────────────────────────────────────────────────────────
+  4. ADDING A NEW TEAM MEMBER
+────────────────────────────────────────────────────────────────────────────────
+
+Step 1 — Open  frontend/js/select-team.js  in a text editor.
+
+Step 2 — Find the  TEAM_ROLES  list near the top of the file.
+
+Step 3 — Add a new line with the role name in single quotes, followed by a
+          comma. Place it in a logical position within the list — grouping
+          similar roles together helps players browse the grid.
+
+          Example — adding an Ethics Consultant after Ethics Advisor:
+
+            'Ethics Advisor',
+            'Ethics Consultant'
+          ];
+
+          (Note: the last item in the list must NOT have a trailing comma)
+
+Step 4 — Save the file and reload the browser. The new member will appear
+          automatically in the grid with an icon, badge, and description.
+
+  Note: The icon and badge are assigned by matching keywords in the name.
+  If your new role name contains "data", "ai", "machine", "security",
+  "privacy", "compliance", "design", "ux", "research", "accessibility",
+  "market", "sales", "brand", "growth", "community", "finance",
+  "operations", "project", or "product" — the correct badge will apply.
+  Any name that does not match a keyword will receive the Build badge and
+  a 💡 icon. See Section 6 for how to assign a custom icon.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  5. EDITING AN EXISTING TEAM MEMBER
+────────────────────────────────────────────────────────────────────────────────
+
+To rename a team member, find their name in the TEAM_ROLES list and change
+the text. The icon, badge, and description update automatically to match the
+new name.
+
+  Important: If a scenario's "suggestedTeam" field references the old name
+  exactly (in frontend/data/scenarios.json), that name will no longer match
+  after the rename. Update the suggestedTeam field in any affected scenarios
+  to use the new name. See the SCENARIO_GUIDE.txt for details on that field.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  6. ASSIGNING A CUSTOM ICON TO A NEW ROLE
+────────────────────────────────────────────────────────────────────────────────
+
+If the automatic icon (💡) does not suit your new role, you can add a custom
+one. In the same file, find the  getRoleVisual  function (around line 79).
+
+Inside it you will see a list of keyword-to-icon mappings like this:
+
+  ['software engineer', { icon: '⚙️' }],
+  ['data scientist',    { icon: '📊' }],
+
+Add a new line for your role, in the same format:
+
+  ['your role name',  { icon: '🔬' }],
+
+The name must be lowercase and match a unique part of the role title.
+Place the new line near similar roles to keep the list readable.
+
+Save the file and reload. The new icon will appear on the team member card.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  7. REMOVING A TEAM MEMBER
+────────────────────────────────────────────────────────────────────────────────
+
+Step 1 — Open  frontend/js/select-team.js  in a text editor.
+
+Step 2 — Find the name in the TEAM_ROLES list and delete the entire line,
+          including its comma.
+
+Step 3 — Check the last item remaining in the list has no trailing comma.
+
+Step 4 — Save and reload. The role will no longer appear on the grid.
+
+  Important: If a scenario's "suggestedTeam" includes this role name, update
+  that scenario's suggestedTeam in  frontend/data/scenarios.json  to replace
+  it with a valid name from the remaining roster.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  8. CHANGING THE BADGE DESCRIPTIONS (TOOLTIP TEXT)
+────────────────────────────────────────────────────────────────────────────────
+
+When a player hovers over the small "i" button on a team card, a tooltip
+appears explaining what that badge category means. These descriptions are
+in the  BADGE_DESCRIPTIONS  object (around line 155):
+
+  const BADGE_DESCRIPTIONS = {
+    'Build':      'The people who write the code and ship the product...',
+    'Ops':        'Keeps the project funded, on schedule...',
+    'Risk':       'Protects the product and its users...',
+    'Experience': 'Makes sure the product is easy, accessible...',
+    'Insights':   'Turns data and AI into decisions...',
+    'Growth':     'Gets the product in front of the right audience...',
+  };
+
+To change a tooltip, edit the text after the colon for that badge. Keep it
+to one or two sentences. Save the file and reload.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  9. CHANGING THE TEAM SIZE REQUIREMENT
+────────────────────────────────────────────────────────────────────────────────
+
+Players must currently select between 4 and 5 team members. This is set by:
+
+  const TEAM_SELECTION = {
+    min: 4,
+    max: 5
+  };
+
+(Around line 150 in the file)
+
+To change the minimum or maximum, update the numbers here. The counter
+display and the "Begin Run" button will automatically reflect the new limits.
+
+  Note: The team display on the results page is designed for 4–5 members.
+  Setting max above 6 may cause layout issues on that page.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  10. HOW TEAM SELECTION AFFECTS THE GAME
+────────────────────────────────────────────────────────────────────────────────
+
+The selected team members are saved to the browser's memory when the player
+clicks "Begin Run". They are:
+  - Displayed on the results page as part of the session summary
+  - Used to validate that the player chose the right mix of roles
+  - Referenced in the suggested team hint shown on this page
+
+Team selection does NOT change which choices are available during stages or
+affect scoring. It is a reflection and discussion tool.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  11. QUICK CHECKLIST BEFORE ADDING A NEW TEAM MEMBER
+────────────────────────────────────────────────────────────────────────────────
+
+  [ ] The name is in title case (e.g. "Ethics Consultant", not "ethics consultant")
+  [ ] The name contains a keyword that maps to the right badge (see Section 2)
+  [ ] A comma follows the name (unless it is the last item in the list)
+  [ ] A custom icon has been added if the automatic one (💡) is not appropriate
+  [ ] Any scenarios using "suggestedTeam" have been updated if a name was changed
+  [ ] The file has been saved and tested in the browser
+
+================================================================================

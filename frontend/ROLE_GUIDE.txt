@@ -1,0 +1,207 @@
+================================================================================
+  TECHTYCOON — ROLE SELECTION GUIDE
+  Everything you need to add, edit, remove, and understand leadership roles
+================================================================================
+
+Roles are defined directly in one file:
+  frontend/select-role.html
+
+Unlike scenarios, roles are written as plain HTML — not JSON. Each role is a
+card on the "Choose your leadership role" screen. No code knowledge is needed
+to add, edit, or remove a role — just copy, paste, and change the text.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  1. WHAT A ROLE IS
+────────────────────────────────────────────────────────────────────────────────
+
+A role is the leadership position the player chooses before the game begins.
+It frames how the player reads decisions throughout the game — it does not
+change the available choices or scoring, but sets the lens the group leads from.
+
+Each role card has three visible parts:
+
+  ABBREVIATION  — the short label shown in the circle (e.g. "Dev", "UX", "PM")
+  NAME          — the full role title shown below the circle
+  DESCRIPTION   — one sentence explaining how this role approaches decisions
+
+There are currently 5 roles:
+  - Technical Lead   (abbreviation: Dev)
+  - Design Lead      (abbreviation: UX)
+  - Product Lead     (abbreviation: PM)
+  - Security Lead    (abbreviation: Sec)
+  - Data Lead        (abbreviation: Data)
+
+
+────────────────────────────────────────────────────────────────────────────────
+  2. WHERE THE ROLES LIVE IN THE FILE
+────────────────────────────────────────────────────────────────────────────────
+
+Open  frontend/select-role.html
+
+Scroll down until you see a section that looks like this (around line 37):
+
+  <div class="avatar-grid" id="roles-list">
+
+    <label class="avatar-card">
+      <input type="radio" name="role" value="developer" id="role-developer">
+      <div class="avatar-icon">Dev</div>
+      <div class="avatar-name">Technical Lead</div>
+      <div class="avatar-description">Drives engineering quality, architecture,
+      and feasibility under pressure.</div>
+    </label>
+
+    ... more roles ...
+
+  </div>
+
+Each role is one <label> block. Everything between <label class="avatar-card">
+and </label> is one complete role card.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  3. HOW EACH PART MAPS TO THE SCREEN
+────────────────────────────────────────────────────────────────────────────────
+
+  <div class="avatar-icon">Dev</div>
+    ↑ The short abbreviation shown inside the circle on the card.
+      Keep it under 5 characters or it will overflow.
+
+  <div class="avatar-name">Technical Lead</div>
+    ↑ The role title shown below the circle in larger text.
+      Keep it under 25 characters.
+
+  <div class="avatar-description">Drives engineering quality...</div>
+    ↑ The small description shown below the title.
+      One sentence. Aim for under 100 characters.
+
+  value="developer"  (inside the <input> line)
+    ↑ The internal ID used to save the player's choice. Must be:
+      - Lowercase
+      - No spaces (use hyphens if needed, e.g. "ethics-lead")
+      - Unique — no two roles should share the same value
+
+
+────────────────────────────────────────────────────────────────────────────────
+  4. EDITING AN EXISTING ROLE
+────────────────────────────────────────────────────────────────────────────────
+
+Step 1 — Open  frontend/select-role.html  in a text editor.
+
+Step 2 — Find the role you want to change. Each role has its value in the
+          <input> line, e.g. value="designer" for the Design Lead.
+
+Step 3 — Change the text inside the relevant div:
+          - To change the circle label: edit the text inside avatar-icon
+          - To change the title:        edit the text inside avatar-name
+          - To change the description:  edit the text inside avatar-description
+
+Step 4 — Save the file and reload the browser. Changes appear immediately.
+
+  Important: Do NOT change the value="..." part unless you are certain no
+  saved game sessions are in progress. Changing this value means any player
+  who already chose that role will have their saved choice become unrecognised.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  5. ADDING A NEW ROLE
+────────────────────────────────────────────────────────────────────────────────
+
+Step 1 — Open  frontend/select-role.html  in a text editor.
+
+Step 2 — Find the closing  </div>  of the  id="roles-list"  section.
+          It comes just after the last </label> block.
+
+Step 3 — Paste the following template just before that closing </div>,
+          and fill in your details:
+
+  <label class="avatar-card">
+    <input type="radio" name="role" value="your-role-id" id="role-your-role-id">
+    <div class="avatar-icon">Abbr</div>
+    <div class="avatar-name">Your Role Title</div>
+    <div class="avatar-description">One sentence describing how this role
+    approaches decisions.</div>
+  </label>
+
+Step 4 — Replace the placeholder values:
+          - value="your-role-id"    →  a short lowercase ID, no spaces
+          - id="role-your-role-id"  →  same as the value, prefixed with "role-"
+          - Abbr                    →  up to 5 characters for the circle
+          - Your Role Title         →  the full name shown on the card
+          - The description         →  one sentence under 100 characters
+
+Step 5 — Save and reload the browser. The new role will appear on the grid.
+
+  Note: The grid is designed for 5 roles. Adding a 6th will still work but
+  may shift the layout slightly on smaller screens. Adding more than 6 is not
+  recommended without adjusting the CSS.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  6. REMOVING A ROLE
+────────────────────────────────────────────────────────────────────────────────
+
+Step 1 — Open  frontend/select-role.html  in a text editor.
+
+Step 2 — Find the <label class="avatar-card"> block for the role you want to
+          remove. You can identify it by the value="..." in its <input> line.
+
+Step 3 — Delete everything from  <label class="avatar-card">  to the matching
+          </label>, inclusive.
+
+Step 4 — Save and reload. The role will no longer appear on the screen.
+
+  Important: Do not remove a role if it is the only one remaining — the
+  player must be able to select at least one role to continue. The game will
+  not let the player proceed without a selection.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  7. ROLE DESCRIPTIONS — WRITING GUIDELINES
+────────────────────────────────────────────────────────────────────────────────
+
+A good role description:
+  - States the lens the role brings, not just the job title
+  - Uses an active verb (e.g. "Drives", "Protects", "Balances", "Cuts", "Reads")
+  - Mentions a tension or trade-off the role is known for
+  - Is one sentence, under 100 characters
+
+Examples of strong descriptions:
+  "Drives engineering quality, architecture, and feasibility under pressure."
+  "Protects usability, accessibility, and clarity for real users."
+  "Balances goals, trade-offs, deadlines, and what ships first."
+
+Examples of weak descriptions (too vague or too long):
+  "Responsible for the technical side of the project."
+  "Works on design and makes sure things look good and are accessible to users
+   with a range of different needs and abilities."
+
+
+────────────────────────────────────────────────────────────────────────────────
+  8. HOW THE SELECTED ROLE IS USED IN THE GAME
+────────────────────────────────────────────────────────────────────────────────
+
+When a player selects a role and clicks "Lock Role":
+  - The role's value (e.g. "designer") is saved to the browser's memory
+  - The game carries this value through to the team selection and stage screens
+  - It is displayed on the results page as part of the session summary
+  - It does NOT change which choices are available or how scores are calculated
+
+The role is purely a framing device — it influences how players discuss
+decisions, not what decisions are available to them.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  9. QUICK CHECKLIST BEFORE ADDING A NEW ROLE
+────────────────────────────────────────────────────────────────────────────────
+
+  [ ] The value="..." is lowercase, no spaces, and unique across all roles
+  [ ] The id="..." matches the value with "role-" prefixed
+  [ ] The circle abbreviation is 5 characters or fewer
+  [ ] The role title is 25 characters or fewer
+  [ ] The description is one sentence and under 100 characters
+  [ ] The description starts with an active verb
+  [ ] The total number of roles on the grid is 5 or 6 (not more)
+  [ ] The file has been saved and tested in the browser
+
+================================================================================

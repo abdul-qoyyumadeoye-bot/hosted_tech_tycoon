@@ -1,0 +1,226 @@
+================================================================================
+  TECHTYCOON — ACCESSIBILITY GUIDE
+  Everything you need to understand, configure, and extend the accessibility
+  features built into the game
+================================================================================
+
+The accessibility features are managed in one file:
+  frontend/js/accessibility.js
+
+This file runs on every page automatically. It controls high contrast mode,
+large text, text-to-speech, and background audio. No changes to HTML files
+are needed to adjust these features.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  1. WHAT THE ACCESSIBILITY FEATURES ARE
+────────────────────────────────────────────────────────────────────────────────
+
+The game includes four built-in accessibility settings:
+
+  HIGH CONTRAST MODE
+    Increases colour contrast across the game to make text and elements
+    easier to read for users with visual impairments.
+    Status: Always ON. There is no toggle for this — it is permanently
+    enabled for all players on all pages.
+
+  LARGE TEXT
+    Increases the font size across all game pages.
+    Default: OFF
+    Player toggle: Available via the accessibility panel (⊕ button)
+
+  TEXT-TO-SPEECH
+    Reads the text inside the main area of the current page aloud when
+    the player clicks "Read Aloud".
+    Default: OFF
+    Player toggle: Available via the accessibility panel (⊕ button)
+    Note: If the player's browser does not support speech synthesis, an
+    alert message will appear when they click "Read Aloud". The button
+    itself is always shown when TTS is enabled — it does not hide based
+    on browser support.
+
+  BACKGROUND AUDIO
+    Plays one of three ambient sounds chosen at random each session.
+    A short click sound plays when buttons or choice cards are pressed.
+    Trigger: Starts playing on the player's first click — not immediately
+    on page load (browsers block audio before user interaction).
+    Audio files: frontend/audio/
+      rustle.mp3  — ambient option 1
+      wind.mp3    — ambient option 2
+      ocean.mp3   — ambient option 3
+      click.mp3   — button interaction sound
+
+
+────────────────────────────────────────────────────────────────────────────────
+  2. THE ACCESSIBILITY PANEL
+────────────────────────────────────────────────────────────────────────────────
+
+The accessibility panel appears on every page. Players open it by clicking
+the  ⊕  button in the top-right corner of the navigation bar.
+
+The panel contains:
+  - A "Large Text" checkbox
+  - A "Text-to-Speech" checkbox
+  - A "Read Aloud" button (only visible when Text-to-Speech is ticked)
+
+There is no high contrast toggle in the panel — high contrast is always on
+and cannot be changed by the player.
+
+Player choices are saved automatically and remembered across all pages and
+sessions. If a player enables Large Text on the welcome page, it remains
+enabled on the results page and on their next visit.
+
+  Important: Do not remove the accessibility panel or the  ⊕  button from
+  any page. It must be present and functional on every screen.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  3. HOW TEXT-TO-SPEECH WORKS
+────────────────────────────────────────────────────────────────────────────────
+
+When a player enables the Text-to-Speech toggle, the "Read Aloud" button
+appears in the panel. Clicking it reads everything inside the main content
+area of the current page aloud using the browser's built-in speech engine.
+No internet connection or third-party service is required.
+
+The speech is read at these settings (set in the code):
+  Rate:   1.0  (normal speed)
+  Pitch:  1.0  (normal pitch)
+  Volume: 1.0  (full volume)
+
+To change the reading speed, open  frontend/js/accessibility.js  and find
+the  readPageAloud  function (around line 110). Change the  utterance.rate
+value — lower numbers are slower (e.g. 0.8), higher numbers are faster
+(e.g. 1.4).
+
+If a player's browser does not support speech synthesis, clicking "Read Aloud"
+will show an alert message. This is expected behaviour — not a bug.
+
+Text-to-speech works best in Chrome and Edge. Firefox and Safari support
+varies by version.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  4. HOW LARGE TEXT WORKS
+────────────────────────────────────────────────────────────────────────────────
+
+When large text is enabled, the game adds a CSS class called  big-text  to
+the  <body>  element on every page. The stylesheet  base.css  then applies
+larger font sizes to all elements whenever this class is present.
+
+To change how much larger the text becomes, find the  .big-text  rules in
+  frontend/css/base.css  and adjust the  font-size  values there.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  5. CHANGING THE DEFAULT SETTINGS
+────────────────────────────────────────────────────────────────────────────────
+
+Default settings are defined in the  loadSettings  function inside
+  accessibility.js  (line 14):
+
+  return {
+    highContrast: true,
+    bigText: parsed.bigText || false,
+    tts: parsed.tts || false
+  };
+
+To change a default, edit the value after  ||  on the relevant line:
+  - false  means the feature is OFF by default for new visitors
+  - true   means the feature is ON by default for new visitors
+
+  Example — to make large text ON by default:
+    bigText: parsed.bigText || true,
+
+  Note: Do not change  highContrast: true  — the game is designed around
+  high contrast being always active.
+
+After changing a default, players who have already visited will not be
+affected — their saved preference takes priority. Only new visitors (or
+those who have cleared their browser data) will see the new default.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  6. CHANGING THE BACKGROUND AUDIO
+────────────────────────────────────────────────────────────────────────────────
+
+Audio files are stored in:
+  frontend/audio/
+
+Each session, one of the three ambient tracks is picked at random. The track
+plays on a loop at 30% volume from the first time the player clicks anything.
+The click sound plays at 50% volume on every button or choice card press.
+
+To replace an ambient sound:
+  Replace the file with a new one using the same filename and .mp3 format.
+  Keep files under 1MB — large files slow down page loading.
+
+To change the volume of ambient audio:
+  Open  accessibility.js, find  this.ambientAudio.volume  (around line 142)
+  and change the value. 0 is silent, 1 is full volume. Default is 0.3.
+
+To change the click sound volume:
+  Find  this.clickAudio.volume  (around line 152) and change the value.
+  Default is 0.5.
+
+To remove a track from the random rotation:
+  Open  accessibility.js  and find the  ambientFiles  array (around line 137):
+
+    const ambientFiles = ['audio/rustle.mp3','audio/wind.mp3','audio/ocean.mp3'];
+
+  Delete the filename you want to remove from inside the square brackets.
+  Leave at least one filename in the list.
+
+To use a fixed track instead of a random one:
+  Replace the entire  ambientFiles  array and the  choice  line with:
+
+    this.ambientAudio.src = 'audio/ocean.mp3';
+
+  (Replace ocean.mp3 with whichever file you want to always play)
+
+To turn off ambient audio entirely:
+  Find  startBackgroundAudio  and delete or comment out the block of code
+  starting with  const ambientFiles  down to the closing  }, { once: true });
+  Leave the click sound section in place unless you want to remove that too.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  7. TESTING THE ACCESSIBILITY FEATURES
+────────────────────────────────────────────────────────────────────────────────
+
+To test all features:
+
+  1. Open the game in Chrome (best compatibility)
+  2. Click the  ⊕  button in the top-right corner of the nav bar
+  3. Tick "Large Text" — all text on the page should grow proportionally
+  4. Tick "Text-to-Speech" — the "Read Aloud" button should appear
+  5. Click "Read Aloud" — the page content should be read aloud
+  6. Navigate to the next page — your settings should remain active
+  7. Reload the page — your settings should still be saved
+
+To test ambient audio:
+  1. Open the welcome page
+  2. Click anywhere on the page (a button, a card, anything)
+  3. Ambient audio should begin playing softly
+  4. Click a button — a short click sound should also play
+
+  Note: Audio will not play before the player has clicked something —
+  this is a browser security requirement, not a bug.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  8. QUICK REFERENCE — WHAT EACH FEATURE IS FOR
+────────────────────────────────────────────────────────────────────────────────
+
+  FEATURE           STATUS        WHO IT HELPS
+  ─────────────     ──────────    ─────────────────────────────────────────
+  High Contrast     Always ON     Users with low vision, colour blindness,
+                                  or difficulty reading low-contrast text
+  Large Text        Player OFF    Users who need larger type for comfortable
+                                  reading
+  Text-to-Speech    Player OFF    Users with dyslexia, reading difficulties,
+                                  or who prefer to listen rather than read
+  Background Audio  Auto (click)  Adds atmosphere — starts on first click,
+                                  random track chosen each session
+
+================================================================================
